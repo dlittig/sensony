@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no">
+
+    <title>OnSec - {% block title %}Sicherheitsunterweisungen{% endblock %}</title>
+
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/bmatznerfontawesome/css/font-awesome.min.css') }}" />
+    {% block stylesheets %}
+        {% stylesheets
+            'css/bootstrap.min.css'
+            'css/bootstrap-toggle.min.css'
+            'css/select2.min.css'
+            'css/jquery-ui.min.css'
+            'css/jquery-ui.structure.min.css'
+            'css/jquery-ui.theme.min.css'
+            'css/style.css'
+            'css/mobile.css'
+            'css/errors.css'
+            filter="cssmin" output='css/compiled/app.css'
+        %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+        {% endstylesheets %}
+    {% endblock %}
+
+    {% block javascript %}
+        {% javascripts
+            'js/angular.min.js'
+            'js/popper.min.js'
+            'js/tether.min.js'
+            'js/jquery.min.js'
+            'js/jquery-ui.min.js'
+            'js/bootstrap.min.js'
+            'js/bootstrap-toggle.min.js'
+            'js/select2.full.min.js'
+            'js/main.js'
+            filter="jsmin" output='js/compiled/app.js'
+        %}
+        <script src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+    {% endblock %}
+
+    {% block ownStylesheets %} {% endblock %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
+</head>
+    <body id="site-body">
+        {% block navigation %}
+            {% include 'HSDOnSecBundle::navigation.html.twig' %}
+        {% endblock %}
+
+        <div class="container site-content">
+            {% block content %}{% endblock %}
+        </div>
+
+        {% block footer %}
+            <hr class = "full-width footer-bar">
+
+            <div style = "text-align: center; height: 40px">
+                <a href class = "footerSize" data-toggle="modal" data-target="#myModal">Impressum und Copyright</a>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" role="dialog">
+                <div class="modal-dialog modal-lg">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Impressum und Copyright</h5>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Hochschulprojekt "onSec" der Hochschule Düsseldorf</p>
+                            <p>Projektbetreuung: Prof. Günther Witte und Lars-Arne Emmerich</p>
+                            <p>Beteiligte Studenten: Markus Holl, David Landry, Alexander Pleß, Tobias Quessel, Caroline Schneider und Daniel Vogelskamp</p>
+                            <p>Überarbeitung und Weiterentwicklung durch: David Littig</p>
+                            <p>Es gilt das Impressum der <a href="https://www.hs-duesseldorf.de/impressum">Hochschule Düsseldorf</a></p>
+                        </div>
+                        <div class="modal-footer">
+                            <span><i class = "fa fa-copyright"></i> Hochschule Düsseldorf, {{ 'now'|date('Y') }}, all rights reserved</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        {% endblock %}
+    </body>
+</html>
+

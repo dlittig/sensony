@@ -1,0 +1,22 @@
+AppBundle\Entity\SensorType:
+    type: entity
+    repositoryClass: AppBundle\Repository\SensorTypeRepository
+    table: sensor_type
+
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+
+    fields:
+        name:
+            type: string
+            nullable: false
+        description:
+            type: string
+            nullable: false
+        mapping:
+            type: string
+            nullable: false

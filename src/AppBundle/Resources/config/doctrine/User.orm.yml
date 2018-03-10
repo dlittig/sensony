@@ -1,0 +1,25 @@
+AppBundle\Entity\User:
+    type: entity
+    repositoryClass: AppBundle\Repository\UserRepository
+    table: user
+
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+
+    fields:
+        username:
+            type: string
+            nullable: false
+        mail:
+            type: string
+            nullable: false
+        password:
+            type: string
+            nullable: false
+        role:
+            type: string
+            nullable: false

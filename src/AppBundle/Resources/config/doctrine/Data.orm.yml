@@ -1,0 +1,73 @@
+AppBundle\Entity\Data:
+    type: entity
+    repositoryClass: AppBundle\Repository\DataRepository
+    table: data
+
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+
+    manyToOne:
+        sensor:
+            targetEntity: Sensor
+            inversedBy: data
+            nullable: false
+            joinColumn:
+                name: sensor_id
+                referencedColumnName: id
+
+    fields:
+        time:
+            type: time
+            nullable: true
+        date:
+            type: date
+            nullable: true
+        latitude:
+            type: float
+            nullable: true
+        longitude:
+            type: float
+            nullable: true
+        elevation:
+            type: float
+            nullable: true
+        speed:
+            type: float
+            nullable: true
+        temp:
+            type: float
+            nullable: true
+        moist:
+            type: float
+            nullable: true
+        pressure:
+            type: float
+            nullable: true
+        ADC0:
+            type: float
+            nullable: true
+        ADC1:
+            type: float
+            nullable: true
+        ADC2:
+            type: float
+            nullable: true
+        ADC3:
+            type: float
+            nullable: true
+        ADC4:
+            type: float
+            nullable: true
+        ADC5:
+            type: float
+            nullable: true
+        ADC6:
+            type: float
+            nullable: true
+        ADC7:
+            type: float
+            nullable: true

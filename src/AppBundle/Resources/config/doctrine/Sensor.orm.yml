@@ -1,0 +1,42 @@
+AppBundle\Entity\Sensor:
+    type: entity
+    repositoryClass: AppBundle\Repository\SensorRepository
+    table: sensor
+
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+
+    fields:
+        latitude:
+            type: float
+            nullable: false
+        longitude:
+            type: float
+            nullable: false
+        uuid:
+            type: string
+            length: 50
+            nullable: false
+        name:
+            type: string
+            nullable: false
+        description:
+            type: string
+            nullable: true
+
+    oneToMany:
+        data:
+            targetEntity: Data
+            mappedBy: sensor
+
+    manyToOne:
+        sensorType:
+            targetEntity: SensorType
+            nullable: false
+            joinColumn:
+                name: sensortype_id
+                referencedColumnName: id
