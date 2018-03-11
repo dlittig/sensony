@@ -4,7 +4,10 @@
         <meta charset="UTF-8">
         <title>{% block title %}Sensony{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
-        {% stylesheets 'css/*' %}
+        {% stylesheets
+            'css/*'
+            filter="cssrewrite" output='css/compiled/app.css'
+        %}
             <link rel="stylesheet" href="{{ asset_url }}" />
         {% endstylesheets %}
     </head>
