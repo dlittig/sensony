@@ -67,6 +67,17 @@ assetic:
 
 easy_admin:
     site_name: 'Sensony'
+    formats:
+        date: 'd.m.Y'
+        time: 'h:i'
+        datetime: 'd.m.Y h:i'
+    design:
+        color_scheme: 'dark'
+        menu:
+            - { label: 'Dashboard', route: 'admin_dashboard', default: true }
+            - Sensor
+            - SensorType
+            - Data
     list:
         actions: ['show', 'edit', 'search', 'delete', 'new']
     entities:
@@ -84,4 +95,4 @@ easy_admin:
         Data:
             class: AppBundle\Entity\Data
             list:
-                fields: ['id', 'time', 'date', 'elevation', 'speed']
+                fields: ['id', 'time', 'date', 'temp', 'elevation']

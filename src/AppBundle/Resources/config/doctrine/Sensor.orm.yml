@@ -39,7 +39,6 @@ AppBundle\Entity\Sensor:
     manyToOne:
         sensorType:
             targetEntity: SensorType
-            required: true
             nullable: false
             joinColumn:
                 name: sensortype_id

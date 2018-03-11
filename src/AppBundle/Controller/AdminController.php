@@ -22,8 +22,7 @@ class AdminController extends BaseAdminController {
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function indexAction(Request $request)
-    {
+    public function indexAction(Request $request) {
         $this->initialize($request);
 
         if (null === $request->query->get('entity')) {
@@ -36,6 +35,26 @@ class AdminController extends BaseAdminController {
         }
 
         return $this->executeDynamicMethod($action.'<EntityName>Action');
+    }
+
+    /**
+     * @Route("/dashboard", name="admin_dashboard")
+     * @Security("has_role('ROLE_ADMIN')")
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function dashboardAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $dataCount = $em->getRepository('AppBundle:Data')->getDataCount();
+        $sensorCount = $em->getRepository('AppBundle:Sensor')->getSensorCount();
+        $data = $em->getRepository('AppBundle:Data')->getRecentTemps(10);
+
+        return $this->render('AppBundle:EasyAdmin:dashboard.html.twig', [
+            'dataCount' => $dataCount[0]['amount'],
+            'sensorCount' => $sensorCount[0]['amount'],
+            'data' => $data
+        ]);
     }
 
 }
