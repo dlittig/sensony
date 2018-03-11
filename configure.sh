@@ -58,5 +58,7 @@ if "$UPDATE" || "$UPGRADE"; then
     php bin/console assets:install --symlink
     php bin/console assetic:dump
 
+    php bin/console translation:update --dump-messages --force en AppBundle
+
     php composer.phar dump-autoload --optimize --no-dev --classmap-authoritative
 fi

@@ -1,0 +1,27 @@
+Sensor: Sensor
+SensorType: 'Sensor type'
+Data: Data
+ID: ID
+Latitude: Latitude
+Longitude: Longitude
+Name: Name
+Description: Description
+Uuid: UUID
+Token: Token
+Mapping: Mapping
+'Sensor type': 'Sensor type'
+Time: Time
+Date: Date
+Elevation: Elevation
+Speed: Speed
+Temp: Temp
+Moist: Moist
+Pressure: Pressure
+'A d c0': ADC0
+'A d c1': ADC1
+'A d c2': ADC2
+'A d c3': ADC3
+'A d c4': ADC4
+'A d c5': ADC5
+'A d c6': ADC6
+'A d c7': ADC7

@@ -24,6 +24,9 @@ AppBundle\Entity\Sensor:
         name:
             type: string
             nullable: false
+        token:
+            type: string
+            nullable: false
         description:
             type: string
             nullable: true
@@ -36,6 +39,7 @@ AppBundle\Entity\Sensor:
     manyToOne:
         sensorType:
             targetEntity: SensorType
+            required: true
             nullable: false
             joinColumn:
                 name: sensortype_id

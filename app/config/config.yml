@@ -67,10 +67,14 @@ assetic:
 
 easy_admin:
     site_name: 'Sensony'
+    list:
+        actions: ['show', 'edit', 'search', 'delete', 'new']
     entities:
         # List the entity class name you want to manage
         Sensor:
             class: AppBundle\Entity\Sensor
+            list:
+                fields: ['id', 'name', 'uuid', 'data']
             new:
                 fields: ['name', 'description', 'longitude', 'latitude', 'uuid', 'sensorType']
             edit:
@@ -79,3 +83,5 @@ easy_admin:
             class: AppBundle\Entity\SensorType
         Data:
             class: AppBundle\Entity\Data
+            list:
+                fields: ['id', 'time', 'date', 'elevation', 'speed']
