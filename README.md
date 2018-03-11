@@ -1,77 +1,57 @@
-Symfony Standard Edition
-========================
+# Sensony
 
-**WARNING**: This distribution does not support Symfony 4. See the
-[Installing & Setting up the Symfony Framework][15] page to find a replacement
-that fits you best.
+Sensony is a simple tool with which you can manage sensors. 
+Sensony includes a simple REST API that receives updates from sensors and saves them to the database.
 
-Welcome to the Symfony Standard Edition - a fully-functional Symfony
-application that you can use as the skeleton for your new applications.
+## Requirements
+To be able to run this project you have to have PHP 5.5.9 installed. 
+Other tools are not required. The database used here is a file-based SQLite database.
 
-For details on how to download and get started with Symfony, see the
-[Installation][1] chapter of the Symfony Documentation.
+## Installation
+First of all download the project from GitHub and place it into a folder of your choice. 
+Locate the configuration script `configure.sh` in the root directory.
+Now create the database and install all necessary dependencies by entering the following command:
+```
+./configure.sh --composer --upgrade
+```
 
-What's inside?
---------------
+After this, a database file is created in `var/` directory.
+The installation process creates a dummy user with username `admin@localhost` and password `admin`.
 
-The Symfony Standard Edition is configured with the following defaults:
+## Usage
+Using the tool is straight forward. Start the server either by creating an apache2/nginx configuration or by using the PHP server.
 
-  * An AppBundle you can use to start coding;
+**Warning!** The PHP server is not intended for production use.
 
-  * Twig as the only configured template engine;
+```
+php -S 127.0.0.1:80 -t web
+```
 
-  * Doctrine ORM/DBAL;
+## API
+TODO
 
-  * Swiftmailer;
+## Using the mapping
+TODO
 
-  * Annotations enabled for everything.
+## Development
+During development the database schema can change. 
+To update it without losing all the data you can use the configuration script once more!
+```
+./configure.sh --update
+```
 
-It comes pre-configured with the following bundles:
+`--update` updates the database, wipes caches, creates symlinks and compiles resources (css).
+If you want to clean the database and load fixtures, you should use `--upgrade`. 
+You can combinate these two modes with `--composer` to get the latest composer version aswell as updated dependencies.
 
-  * **FrameworkBundle** - The core Symfony framework bundle
+## Built with
 
-  * [**SensioFrameworkExtraBundle**][6] - Adds several enhancements, including
-    template and routing annotation capability
-
-  * [**DoctrineBundle**][7] - Adds support for the Doctrine ORM
-
-  * [**TwigBundle**][8] - Adds support for the Twig templating engine
-
-  * [**SecurityBundle**][9] - Adds security by integrating Symfony's security
-    component
-
-  * [**SwiftmailerBundle**][10] - Adds support for Swiftmailer, a library for
-    sending emails
-
-  * [**MonologBundle**][11] - Adds support for Monolog, a logging library
-
-  * **WebProfilerBundle** (in dev/test env) - Adds profiling functionality and
-    the web debug toolbar
-
-  * **SensioDistributionBundle** (in dev/test env) - Adds functionality for
-    configuring and working with Symfony distributions
-
-  * [**SensioGeneratorBundle**][13] (in dev env) - Adds code generation
-    capabilities
-
-  * [**WebServerBundle**][14] (in dev env) - Adds commands for running applications
-    using the PHP built-in web server
-
-  * **DebugBundle** (in dev/test env) - Adds Debug and VarDumper component
-    integration
-
-All libraries and bundles included in the Symfony Standard Edition are
-released under the MIT or BSD license.
+* [**Symfony**][1]
+* [**EasyAdminBundle**][2] 
+* [**Composer**][3]
 
 Enjoy!
 
-[1]:  https://symfony.com/doc/3.4/setup.html
-[6]:  https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/index.html
-[7]:  https://symfony.com/doc/3.4/doctrine.html
-[8]:  https://symfony.com/doc/3.4/templating.html
-[9]:  https://symfony.com/doc/3.4/security.html
-[10]: https://symfony.com/doc/3.4/email.html
-[11]: https://symfony.com/doc/3.4/logging.html
-[13]: https://symfony.com/doc/current/bundles/SensioGeneratorBundle/index.html
-[14]: https://symfony.com/doc/current/setup/built_in_web_server.html
-[15]: https://symfony.com/doc/current/setup.html
+[1]: https://github.com/symfony/symfony
+[2]: https://github.com/EasyCorp/EasyAdminBundle
+[3]: https://github.com/composer/composer

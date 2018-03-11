@@ -1,8 +1,8 @@
 {
-    "name": "symfony/framework-standard-edition",
+    "name": "dlittig/sensony",
     "license": "MIT",
     "type": "project",
-    "description": "The \"Symfony Standard Edition\" distribution",
+    "description": "Sensony is a simple tool with which you can manage sensors.",
     "autoload": {
         "psr-4": {
             "AppBundle\\": "src/AppBundle"

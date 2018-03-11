@@ -45,7 +45,7 @@ class ApiV1Controller extends Controller {
      * @param ParameterBag $request
      * @return object
      */
-    private function isAuthenticated(ParameterBag $request): object {
+    private function isAuthenticated(ParameterBag $request) {
         $sensor = $this->em->getRepository(Sensor::class)->findOneBy(['id' => $request->getInt('id')]);
 
         if($sensor != null) {
@@ -76,7 +76,7 @@ class ApiV1Controller extends Controller {
      * @param ParameterBag $request
      * @return Data
      */
-    private function retrieveData(Data $data, ParameterBag $request): Data {
+    private function retrieveData(Data $data, ParameterBag $request) {
         $data->setADC0($request->get('adc0'));
         $data->setADC1($request->get('adc1'));
         $data->setADC2($request->get('adc2'));

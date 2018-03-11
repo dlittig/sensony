@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 class SensorType {
 
-    public function __toString(): string {
+    public function __toString() {
         return $this->name;
     }
     /**
