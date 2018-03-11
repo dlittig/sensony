@@ -87,7 +87,7 @@ fabric.properties
 !var/cache/.gitkeep
 !var/logs/.gitkeep
 !var/sessions/.gitkeep
-/web/css/compiled
+/web/css/compiled/*
 
 # Parameters
 /app/config/parameters.yml
