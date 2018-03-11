@@ -4,9 +4,6 @@ namespace AppBundle\Entity;
 
 use AppBundle\Globals\Utils;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\SensorRepository")
- */
 class Sensor {
 
     public function __construct() {

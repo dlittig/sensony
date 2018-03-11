@@ -55,5 +55,7 @@ if "$UPDATE" || "$UPGRADE"; then
     php bin/console --env=prod cache:warmup
     php bin/console --env=prod --no-warmup cache:clear
 
+    php bin/console assets:install --symlink
+
     php composer.phar dump-autoload --optimize --no-dev --classmap-authoritative
 fi

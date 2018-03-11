@@ -28,7 +28,7 @@ class StartController extends Controller {
                 'last_username' => $lastUsername
             ]);
         } else {
-            return $this->redirectToRoute('homepage');
+            return $this->redirectToRoute('admin');
         }
     }
 }

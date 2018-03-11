@@ -4,9 +4,6 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\SensorTypeRepository")
- */
 class SensorType {
 
     public function __toString(): string {

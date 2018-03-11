@@ -1,0 +1,12 @@
+index:
+    path:     /
+    defaults: { _controller: "AppBundle:Start:index" }
+
+homepage:
+    path:     /homepage
+    defaults: { _controller: "AppBundle:Default:index" }
+
+admin:
+    resource: "@AppBundle/Controller/AdminController.php"
+    prefix:   /admin
+    type:     annotation

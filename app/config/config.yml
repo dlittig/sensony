@@ -10,7 +10,7 @@ parameters:
 
 framework:
     #esi: ~
-    #translator: { fallbacks: ['%locale%'] }
+    translator: { fallbacks: ['%locale%'] }
     secret: '%secret%'
     router:
         resource: '%kernel.project_dir%/app/config/routing.yml'
@@ -58,3 +58,24 @@ swiftmailer:
     username: '%mailer_user%'
     password: '%mailer_password%'
     spool: { type: memory }
+
+assetic:
+    debug:          '%kernel.debug%'
+    use_controller: '%kernel.debug%'
+    filters:
+        cssrewrite: ~
+
+easy_admin:
+    site_name: 'Sensony'
+    entities:
+        # List the entity class name you want to manage
+        Sensor:
+            class: AppBundle\Entity\Sensor
+            new:
+                fields: ['name', 'description', 'longitude', 'latitude', 'uuid', 'sensorType']
+            edit:
+                fields: ['name', 'description', 'longitude', 'latitude', 'uuid', 'sensorType', 'token']
+        SensorType:
+            class: AppBundle\Entity\SensorType
+        Data:
+            class: AppBundle\Entity\Data

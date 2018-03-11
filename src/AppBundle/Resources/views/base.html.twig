@@ -2,8 +2,11 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}Sensony{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
+        {% stylesheets 'css/*' %}
+            <link rel="stylesheet" href="{{ asset_url }}" />
+        {% endstylesheets %}
     </head>
     <body>
         {% block body %}{% endblock %}
