@@ -37,7 +37,7 @@ if "$UPDATE" || "$UPGRADE"; then
     php composer.phar install
 
     # Generate entities
-    php bin/console doctrine:generate:entities HSDOnSecBundle
+    php bin/console doctrine:generate:entities AppBundle
 
     if "$UPDATE"; then
         php bin/console doctrine:schema:update --force
@@ -55,12 +55,5 @@ if "$UPDATE" || "$UPGRADE"; then
     php bin/console --env=prod cache:warmup
     php bin/console --env=prod --no-warmup cache:clear
 
-    php bin/console assets:install web --symlink --relative
-    php bin/console assetic:dump
-
     php composer.phar dump-autoload --optimize --no-dev --classmap-authoritative
-
-    # RabbitMQ for mailing purposes
-    php bin/console rabbitmq:setup-fabric
-    php bin/console rabbitmq:consumer -w mails_queue &
 fi

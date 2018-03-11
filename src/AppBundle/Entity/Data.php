@@ -545,4 +545,3 @@ class Data
         return $this->sensor;
     }
 }
-

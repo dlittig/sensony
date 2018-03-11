@@ -83,6 +83,7 @@ fabric.properties
 /var/cache/*
 /var/logs/*
 /var/sessions/*
+/var/app.db
 !var/cache/.gitkeep
 !var/logs/.gitkeep
 !var/sessions/.gitkeep

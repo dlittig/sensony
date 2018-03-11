@@ -2,19 +2,14 @@
 
 namespace AppBundle\Controller;
 
-use App\Entity\Data;
-use App\Entity\Sensor;
+use AppBundle\Entity\Data;
+use AppBundle\Entity\Sensor;
 use Doctrine\ORM\EntityManager;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use FOS\RestBundle\Controller\Annotations\Post;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 
-/**
- * @Route("/api/v1")
- */
 class ApiV1Controller extends Controller {
 
     /**
@@ -27,7 +22,7 @@ class ApiV1Controller extends Controller {
      * @param Request $request
      * @return JsonResponse
      */
-    public function data(Request $request) {
+    public function dataAction(Request $request) {
         if(!$this->validateStructure($request->request)) return new JsonResponse(['error' => 'Invalid data.'], 400);
 
         $this->em = $this->getDoctrine()->getManager();
@@ -50,7 +45,7 @@ class ApiV1Controller extends Controller {
      * @param ParameterBag $request
      * @return object
      */
-    private function isAuthenticated(ParameterBag $request): Sensor {
+    private function isAuthenticated(ParameterBag $request): object {
         $sensor = $this->em->getRepository(Sensor::class)->findOneBy(['id' => $request->getInt('id')]);
 
         if($sensor != null) {
@@ -92,13 +87,13 @@ class ApiV1Controller extends Controller {
         $data->setADC7($request->get('adc7'));
         $data->setLatitude($request->get('latitude'));
         $data->setLongitude($request->get('longitude'));
-        $data->setElavation($request->get('elevation'));
+        $data->setElevation($request->get('elevation'));
         $data->setTemp($request->get('temp'));
         $data->setMoist($request->get('moist'));
         $data->setPressure($request->get('pressure'));
         $data->setSpeed($request->get('speed'));
-        $data->setDateDate($request->get('date'));
-        $data->setTimeData($request->get('time'));
+        $data->setDate($request->get('date'));
+        $data->setTime($request->get('time'));
 
         return $data;
     }

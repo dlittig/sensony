@@ -4,32 +4,7 @@ namespace AppBundle\Entity;
 
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class User implements UserInterface, \Serializable {
-
-    // add your own fields
-
-    /**
-     * String representation of object
-     * @link http://php.net/manual/en/serializable.serialize.php
-     * @return string the string representation of the object or null
-     * @since 5.1.0
-     */
-    public function serialize() {
-        // TODO: Implement serialize() method.
-    }
-
-    /**
-     * Constructs the object
-     * @link http://php.net/manual/en/serializable.unserialize.php
-     * @param string $serialized <p>
-     * The string representation of the object.
-     * </p>
-     * @return void
-     * @since 5.1.0
-     */
-    public function unserialize($serialized) {
-        // TODO: Implement unserialize() method.
-    }
+class User implements UserInterface {
 
     /**
      * Returns the roles granted to the user.
@@ -45,7 +20,7 @@ class User implements UserInterface, \Serializable {
      * and populated in any number of different ways when the user object
      * is created.
      *
-     * @return (Role|string)[] The user roles
+     * @return array (Role|string)[] The user roles
      */
     public function getRoles() {
         return [$this->role];

@@ -1,0 +1,4 @@
+api_v1_data:
+    path:     /data
+    defaults: { _controller: "AppBundle:ApiV1:data" }
+    methods:  POST
