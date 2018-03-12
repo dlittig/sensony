@@ -26,4 +26,14 @@ class DataRepository extends \Doctrine\ORM\EntityRepository {
             ->getQuery()
             ->getResult();
     }
+
+    public function getMax($max) {
+        return $this->createQueryBuilder('data')
+            ->select()
+            ->setMaxResults($max)
+            ->orderBy('data.time', 'ASC')
+            ->orderBy('data.date', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }

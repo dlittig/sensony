@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Data;
 use AppBundle\Entity\Sensor;
 use Doctrine\ORM\EntityManager;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -18,11 +19,12 @@ class ApiV1Controller extends Controller {
     private $em;
 
     /**
-     * @Post("/data", name="api_v1")
      * @param Request $request
+     * @param LoggerInterface $logger
      * @return JsonResponse
      */
-    public function dataAction(Request $request) {
+    public function dataAction(Request $request, LoggerInterface $logger) {
+        $logger->info($request->request->all());
         if(!$this->validateStructure($request->request)) return new JsonResponse(['error' => 'Invalid data.'], 400);
 
         $this->em = $this->getDoctrine()->getManager();
