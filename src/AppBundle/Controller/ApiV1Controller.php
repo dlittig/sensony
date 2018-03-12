@@ -24,7 +24,8 @@ class ApiV1Controller extends Controller {
      * @return JsonResponse
      */
     public function dataAction(Request $request, LoggerInterface $logger) {
-        $logger->info($request->request->all());
+        $logger->info(var_export($request->request->all()));
+
         if(!$this->validateStructure($request->request)) return new JsonResponse(['error' => 'Invalid data.'], 400);
 
         $this->em = $this->getDoctrine()->getManager();
