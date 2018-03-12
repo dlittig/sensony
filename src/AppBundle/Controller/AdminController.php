@@ -67,23 +67,37 @@ class AdminController extends BaseAdminController {
      * @return StreamedResponse
      */
     public function exportAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
-        $data = $em->getRepository('AppBundle:Data')->getMax(50);
-
-
         $response = new StreamedResponse();
         $response->setCallback(function() {
             $handle = fopen('php://output', 'w+');
 
+            $em = $this->getDoctrine()->getManager();
+            $data = $em->getRepository('AppBundle:Data')->getMax(50);
+
             // Add the header of the CSV file
-            fputcsv($handle, array('Name', 'Surname', 'Age', 'Sex'),';');
-            // Query data from database
-            $results = $this->connection->query("Replace this with your query");
+            fputcsv(
+                $handle,
+                ['ID', 'Sensor', 'Time', 'Date', 'Latitude', 'Longitude', 'Elevation', 'Speed', 'Temp', 'Moist', 'Pressure'],
+                ';'
+            );
+
             // Add the data queried from database
-            while($row = $results->fetch()) {
+            foreach($data as $item) {
                 fputcsv(
                     $handle, // The file pointer
-                    array($row['name'], $row['surname'], $row['age'], $row['sex']), // The fields
+                    [
+                        $item->getId(),
+                        ($item->getSensor() != null) ? $item->getSensor()->getName() : 'No sensor assigned.',
+                        $item->getTime()->format('h:i'),
+                        $item->getDate()->format('d.m.Y'),
+                        $item->getLatitude(),
+                        $item->getLongitude(),
+                        $item->getElevation(),
+                        $item->getSpeed(),
+                        $item->getTemp(),
+                        $item->getMoist(),
+                        $item->getPressure()
+                    ], // The fields
                     ';' // The delimiter
                 );
             }

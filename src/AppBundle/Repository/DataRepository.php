@@ -20,8 +20,7 @@ class DataRepository extends \Doctrine\ORM\EntityRepository {
         return $this->createQueryBuilder('data')
             ->select()
             ->setMaxResults($max)
-            ->orderBy('data.time', 'ASC')
-            ->orderBy('data.date', 'ASC')
+            ->orderBy('data.id', 'ASC')
             ->where('data.temp IS NOT NULL')
             ->getQuery()
             ->getResult();
@@ -31,8 +30,7 @@ class DataRepository extends \Doctrine\ORM\EntityRepository {
         return $this->createQueryBuilder('data')
             ->select()
             ->setMaxResults($max)
-            ->orderBy('data.time', 'ASC')
-            ->orderBy('data.date', 'ASC')
+            ->orderBy('data.id', 'ASC')
             ->getQuery()
             ->getResult();
     }
