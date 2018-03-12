@@ -58,7 +58,9 @@ if "$UPDATE" || "$UPGRADE"; then
     php bin/console assets:install --symlink
     php bin/console assetic:dump
 
-    php bin/console translation:update --dump-messages --force en AppBundle
+    # Print version to yml file
+    echo "parameters:" > app/config/version.yml
+    { echo "    version: " & git rev-list --count master; } | tr "\n" " " >> app/config/version.yml
 
     php composer.phar dump-autoload --optimize --no-dev --classmap-authoritative
 fi

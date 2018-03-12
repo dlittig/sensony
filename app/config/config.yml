@@ -1,5 +1,6 @@
 imports:
     - { resource: parameters.yml }
+    - { resource: version.yml }
     - { resource: security.yml }
     - { resource: services.yml }
 
@@ -78,6 +79,7 @@ easy_admin:
             - Sensor
             - SensorType
             - Data
+            - { label: 'Version: 0.0.%version%' }
         assets:
             css: ['/css/admin_dashboard.css']
     list:
