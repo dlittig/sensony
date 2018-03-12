@@ -1,0 +1,75 @@
+<script src="{{ asset('js/Chart.bundle.min.js') }}"></script>
+<script>
+    $(document).ready(function() {
+        window.chartColors = {
+            red: 'rgb(255, 99, 132)',
+            orange: 'rgb(255, 159, 64)',
+            yellow: 'rgb(255, 205, 86)',
+            green: 'rgb(75, 192, 192)',
+            blue: 'rgb(54, 162, 235)',
+            purple: 'rgb(153, 102, 255)',
+            grey: 'rgb(201, 203, 207)'
+        };
+
+        var ctx = document.getElementById("canvas").getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [
+                    {% for item in data %}
+                    "{{ item.time|date('h:i') }}",
+                    {% endfor %}
+                ],
+                datasets: [{
+                    label: 'Temp. in °C',
+                    data: [
+                        {% for item in data %}
+                        {{ item.temp }},
+                        {% endfor %}
+                    ],
+                    backgroundColor: window.chartColors.red,
+                    borderColor: window.chartColors.red,
+                    borderWidth: 1,
+                    fill: false,
+                    yAxisID: 'tempY'
+                }, {
+                    label: 'Pressure in mb',
+                    data: [
+                        {% for item in data %}
+                        {{ item.pressure }},
+                        {% endfor %}
+                    ],
+                    backgroundColor: window.chartColors.blue,
+                    borderColor: window.chartColors.blue,
+                    borderWidth: 1,
+                    fill: false,
+                    yAxisID: 'pressureY'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    yAxes: [{
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        id: 'tempY'
+                    }, {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        id: 'pressureY'
+                    }]
+                }
+            }
+        });
+    })
+</script>
+
+<div class="col-xs-12 col-md-6">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <canvas id = "canvas"></canvas>
+        </div>
+    </div>
+</div>

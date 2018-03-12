@@ -1,0 +1,84 @@
+<div class = "col-xs-12 col-md-3">
+    <form method="post" action="{{ url('admin_export') }}">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Export</h3>
+            </div>
+            <div class="panel-body">
+                <p><b>Properties:</b></p>
+                <div class="checkbox spaced">
+                    <label>
+                        <input type="checkbox" checked value="Id" name="properties[]"> ID
+                    </label>
+                    <label>
+                        <input type="checkbox" checked value="Time" name="properties[]"> Time
+                    </label>
+                    <label>
+                        <input type="checkbox" checked value="Date" name="properties[]"> Date
+                    </label>
+                    <label>
+                        <input type="checkbox" checked value="Sensor" name="properties[]"> Sensor
+                    </label>
+                    <label>
+                        <input type="checkbox" checked value="Longitude" name="properties[]"> Longitude
+                    </label>
+                    <label>
+                        <input type="checkbox" checked value="Latitude" name="properties[]"> Latitude
+                    </label>
+                    <label>
+                        <input type="checkbox" checked value="Elevation" name="properties[]"> Elevation
+                    </label>
+                    <label>
+                        <input type="checkbox" checked value="Speed" name="properties[]"> Speed
+                    </label>
+                    <label>
+                        <input type="checkbox" checked value="Temp" name="properties[]"> Temp
+                    </label>
+                    <label>
+                        <input type="checkbox" checked value="Moist" name="properties[]"> Moist
+                    </label>
+                    <label>
+                        <input type="checkbox" checked value="Pressure" name="properties[]"> Pressure
+                    </label>
+                    <label>
+                        <input type="checkbox" checked value="ADC0" name="properties[]"> ADC0
+                    </label>
+                    <label>
+                        <input type="checkbox" checked value="ADC1" name="properties[]"> ADC1
+                    </label>
+                    <label>
+                        <input type="checkbox" checked value="ADC2" name="properties[]"> ADC2
+                    </label>
+                    <label>
+                        <input type="checkbox" checked value="ADC3" name="properties[]"> ADC3
+                    </label>
+                    <label>
+                        <input type="checkbox" checked value="ADC4" name="properties[]"> ADC4
+                    </label>
+                    <label>
+                        <input type="checkbox" checked value="ADC5" name="properties[]"> ADC5
+                    </label>
+                    <label>
+                        <input type="checkbox" checked value="ADC6" name="properties[]"> ADC6
+                    </label>
+                    <label>
+                        <input type="checkbox" checked value="ADC7" name="properties[]"> ADC7
+                    </label>
+                </div>
+
+                <label>Amount of items to export:</label>
+                <select class="form-control" name="amount">
+                    <option value="25" selected>25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                    <option value="all">All</option>
+                </select>
+            </div>
+            <ul class="list-group" style="margin-left: 0;">
+                <li class="list-group-item">
+                    <button type = "submit" class = "btn btn-primary btn-block"><i class="fa fa-download"></i> Export</button>
+                </li>
+            </ul>
+        </div>
+    </form>
+</div>

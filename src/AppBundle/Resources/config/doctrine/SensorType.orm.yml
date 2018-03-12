@@ -18,5 +18,5 @@ AppBundle\Entity\SensorType:
             type: string
             nullable: false
         mapping:
-            type: string
+            type: text
             nullable: false

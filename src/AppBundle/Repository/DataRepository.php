@@ -16,14 +16,22 @@ class DataRepository extends \Doctrine\ORM\EntityRepository {
             ->getResult();
     }
 
-    public function getRecentTemps($max) {
-        return $this->createQueryBuilder('data')
+    /**
+     * @param array $items
+     * @param $max
+     * @return array
+     */
+    public function getRecent(array $items, $max) {
+        $query = $this->createQueryBuilder('data')
             ->select()
             ->setMaxResults($max)
-            ->orderBy('data.id', 'ASC')
-            ->where('data.temp IS NOT NULL')
-            ->getQuery()
-            ->getResult();
+            ->orderBy('data.id', 'ASC');
+
+        foreach($items as $item) {
+            $query->andWhere('data.'. $item .' IS NOT NULL');
+        }
+
+        return $query->getQuery()->getResult();
     }
 
     public function getMax($max) {
@@ -31,6 +39,15 @@ class DataRepository extends \Doctrine\ORM\EntityRepository {
             ->select()
             ->setMaxResults($max)
             ->orderBy('data.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getRecentDateTime() {
+        return $this->createQueryBuilder('data')
+            ->select('data.time, data.date')
+            ->setMaxResults(1)
+            ->orderBy('data.id', 'DESC')
             ->getQuery()
             ->getResult();
     }

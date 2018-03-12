@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 // Annotations
+use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
@@ -49,13 +50,17 @@ class AdminController extends BaseAdminController {
     public function dashboardAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
         $dataCount = $em->getRepository('AppBundle:Data')->getDataCount();
+        $recentTimestamp = $em->getRepository('AppBundle:Data')->getRecentDateTime();
         $sensorCount = $em->getRepository('AppBundle:Sensor')->getSensorCount();
-        $data = $em->getRepository('AppBundle:Data')->getRecentTemps(10);
+        $data = $em->getRepository('AppBundle:Data')->getRecent(['temp', 'pressure'], 10);
+
+        $recentTimestamp = (count($recentTimestamp) > 0) ? $recentTimestamp : null;
 
         return $this->render('AppBundle:EasyAdmin:dashboard.html.twig', [
             'dataCount' => $dataCount[0]['amount'],
             'sensorCount' => $sensorCount[0]['amount'],
-            'data' => $data
+            'data' => $data,
+            'recentTimestamp' => $recentTimestamp[0]
         ]);
     }
 
@@ -66,38 +71,43 @@ class AdminController extends BaseAdminController {
      * @param Request $request
      * @return StreamedResponse
      */
-    public function exportAction(Request $request) {
+    public function exportAction(Request $request, LoggerInterface $logger) {
         $response = new StreamedResponse();
-        $response->setCallback(function() {
+        $response->setCallback(function() use ($request, $logger) {
             $handle = fopen('php://output', 'w+');
 
             $em = $this->getDoctrine()->getManager();
-            $data = $em->getRepository('AppBundle:Data')->getMax(50);
+
+            // Set the limit
+            if($request->request->getAlnum('amount') === 'all') {
+                $data = $em->getRepository('AppBundle:Data')->getMax(-1);
+            } else {
+                $data = $em->getRepository('AppBundle:Data')->getMax($request->request->getInt('amount'));
+            }
 
             // Add the header of the CSV file
             fputcsv(
                 $handle,
-                ['ID', 'Sensor', 'Time', 'Date', 'Latitude', 'Longitude', 'Elevation', 'Speed', 'Temp', 'Moist', 'Pressure'],
+                array_values($request->request->get('properties')),
                 ';'
             );
 
             // Add the data queried from database
             foreach($data as $item) {
+                $row = [];
+                foreach($request->request->get('properties') as $key => $value) {
+                    if($value === 'Sensor') {
+                        $row[] = ($item->getSensor() != null) ? $item->getSensor()->__toString() : 'No sensor assigned.';
+                    } else if($value === 'Time') {
+                        $row[] = $item->{'get'.$value}()->format('h:i');
+                    } else if($value === 'Date') {
+                        $row[] = $item->{'get'.$value}()->format('d.m.Y');
+                    } else $row[] = $item->{'get'.$value}(); // Use the getter by the passed form data string
+                }
+
                 fputcsv(
                     $handle, // The file pointer
-                    [
-                        $item->getId(),
-                        ($item->getSensor() != null) ? $item->getSensor()->getName() : 'No sensor assigned.',
-                        $item->getTime()->format('h:i'),
-                        $item->getDate()->format('d.m.Y'),
-                        $item->getLatitude(),
-                        $item->getLongitude(),
-                        $item->getElevation(),
-                        $item->getSpeed(),
-                        $item->getTemp(),
-                        $item->getMoist(),
-                        $item->getPressure()
-                    ], // The fields
+                    $row,
                     ';' // The delimiter
                 );
             }

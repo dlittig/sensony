@@ -78,6 +78,8 @@ easy_admin:
             - Sensor
             - SensorType
             - Data
+        assets:
+            css: ['/css/admin_dashboard.css']
     list:
         actions: ['show', 'edit', 'search', 'delete', 'new']
     entities:
@@ -95,4 +97,4 @@ easy_admin:
         Data:
             class: AppBundle\Entity\Data
             list:
-                fields: ['id', 'time', 'date', 'temp', 'elevation']
+                fields: ['id', 'time', 'date', 'temp', 'pressure', 'elevation']
