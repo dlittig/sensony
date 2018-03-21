@@ -33,3 +33,7 @@ services:
     # AppBundle\Service\ExampleService:
     #     arguments:
     #         $someArgument: 'some_value'
+
+    #sensor_provider_assistant:
+    #    class: AppBundle\Service\SensorProviderAssistant
+    #    arguments: [ "@doctrine.orm.entity_manager" , "@service_container" ]

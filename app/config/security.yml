@@ -5,6 +5,7 @@ security:
         AppBundle\Entity\User:
             algorithm: bcrypt
             cost: 13
+        AppBundle\Entity\Sensor: plaintext
 
     # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
@@ -12,6 +13,12 @@ security:
             entity:
                 class: AppBundle:User
                 property: mail
+        #sensor_provider:
+        #    id: AppBundle\Security\Provider\SensorProvider
+        sensor_provider:
+            entity:
+                class: AppBundle:Sensor
+                property: uuid
         in_memory: { memory: ~ }
 
     firewalls:
@@ -19,6 +26,16 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
+        api:
+            pattern: ^/api/
+            logout_on_user_change: true
+            anonymous: ~
+            http_basic: ~
+            provider: sensor_provider
+            #guard:
+            #    authenticators:
+            #        - AppBundle\Security\Authenticator\TokenAuthenticator
 
         main:
             anonymous: ~
@@ -45,7 +62,9 @@ security:
         - { path: ^/*, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/homepage, roles: ROLE_ADMIN }
+        - { path: ^/api, roles: ROLE_SENSOR}
 
     role_hierarchy:
-        ROLE_USER : []
-        ROLE_ADMIN: [ROLE_USER]
+        ROLE_SENSOR: []
+        ROLE_USER :  []
+        ROLE_ADMIN:  [ROLE_USER]

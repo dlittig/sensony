@@ -5,11 +5,12 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Data;
 use AppBundle\Entity\Sensor;
 use Doctrine\ORM\EntityManager;
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class ApiV1Controller extends Controller {
 
@@ -19,22 +20,24 @@ class ApiV1Controller extends Controller {
     private $em;
 
     /**
+     * @Security("has_role('ROLE_SENSOR')")
      * @param Request $request
-     * @param LoggerInterface $logger
+     * @param UserInterface $sensor
      * @return JsonResponse
      */
-    public function dataAction(Request $request, LoggerInterface $logger) {
-        if(!$this->validateStructure($request->request)) return new JsonResponse(['error' => 'Invalid data.'], 400);
+    public function dataAction(Request $request, UserInterface $sensor) {
+        //if(!$this->validateStructure($request->request)) return new JsonResponse(['error' => 'Invalid data.'], 400);
+        if ($sensor === null) return new JsonResponse(['error' => 'Invalid data.'], 400);
 
         $this->em = $this->getDoctrine()->getManager();
 
         // Check for authentication
-        $sensor = null;
-        if(($sensor = $this->isAuthenticated($request->request)) === null) return new JsonResponse(['error' => 'Not authenticated.'], 403);
+        # $sensor = null;
+        # if(($sensor = $this->isAuthenticated($request->request)) === null) return new JsonResponse(['error' => 'Not authenticated.'], 403);
 
         $data = new Data();
         $data->setSensor($sensor);
-        $this->retrieveData($data, $request->request);
+        $this->retrieveData($data, new ParameterBag(json_decode($request->getContent(), true)));
         $this->em->persist($data);
         $this->em->flush();
 
