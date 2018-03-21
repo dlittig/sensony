@@ -1,6 +1,6 @@
 # Sensony
 
-Sensony is a simple tool with which you can manage sensors. 
+Sensony is a simple tool with which you can manage sensor data. Data can be temperature, elevation, humidity or pressure for example.  
 Sensony includes a simple REST API that receives updates from sensors and saves them to the database.
 
 ## Requirements
@@ -24,14 +24,38 @@ Using the tool is straight forward. Start the server either by creating an apach
 **Warning!** The PHP server is not intended for production use.
 
 ```
-php -S 127.0.0.1:80 -t web
+php -S 127.0.0.1:8000 -t web
 ```
 
 ## API
-TODO
+The REST API can be reached at this URL:
+```
+api/v1/data
+```
 
+The API requires a basic authentication before accepting any data. Before you start setting up the sensor to push
+data to this url, you have to setup the sensor in Sensony first. Follow these simple steps:
+1. Create a `SensorType` that describes the type or group of sensor best
+2. Create a `Sensor` and assign a `SensorType` to it. Make sure to add an `UUID`. After clicking on "Save" a 
+token will be generated, which you can lookup by clicking "Show" on the sensor overview page.
+3. `UUID` and `Token` will be the login credentials for the basic authentication. Enter those credentials in the 
+setup process of your sensor.
+
+Example JSON that is accepted by the API:
+```
+{
+	"speed" : 249.0,
+	"temp" : 23.3,
+	"pressure" : 1011
+}
+```
+
+TODO: API without basic auth
 ## Using the mapping
-TODO
+Different sensors are sending their data in their own formats with their own labels. Mappings are used to 
+guarantee that the data is being saved in the correct attribute. You can specify a sensor mapping per type.
+
+TODO: Implementation and documentation
 
 ## Development
 During development the database schema can change. 
