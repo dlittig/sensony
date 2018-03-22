@@ -8,7 +8,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class Sensor implements UserInterface {
 
     public function __construct() {
-        $this->token = Utils::generateRandomString(64);
+        $this->token = Utils::generateRandomString(32);
     }
 
     public function __toString() {

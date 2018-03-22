@@ -27,6 +27,12 @@ Using the tool is straight forward. Start the server either by creating an apach
 php -S 127.0.0.1:8000 -t web
 ```
 
+or
+
+```
+php bin/console server:run 127.0.0.1:8000
+```
+
 ## API
 The REST API can be reached at this URL:
 ```
