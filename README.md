@@ -57,11 +57,48 @@ Example JSON that is accepted by the API:
 ```
 
 TODO: API without basic auth
+
 ## Using the mapping
 Different sensors are sending their data in their own formats with their own labels. Mappings are used to 
 guarantee that the data is being saved in the correct attribute. You can specify a sensor mapping per type.
 
-TODO: Implementation and documentation
+The mapping offers to translate the following attributes:
+        
+
+| **Attributes** |
+| -------------- |
+| `adc0`         |
+| `adc1`         |
+| `adc2`         |
+| `adc3`         |
+| `adc4`         |
+| `adc5`         |
+| `adc6`         |
+| `adc7`         |
+| `latitude`     |
+| `longitude`    |
+| `elevation`    |
+| `temp`         |
+| `moist`        |
+| `pressure`     |
+| `speed`        |
+| `date`         |
+| `time`         |
+
+You can configure the mapping in the eiditing page of the sensor by adding simple key value pairs.
+Simple example:
+
+```
+adc0: 'xyz'
+adc1: 'xyz'
+temp: 'temperature'
+...
+```
+
+What this mapping does is that the incoming JSON with the key `xyz` gets mapped to the database column with the name `adc0`. 
+Same procedure is being used for temperature. Also the value of `xyz` is being filled into the attribute `adc1`. In 
+this way you can spread the values to different attributes. If you don't specify a mapping, the tool searches for the default 
+attribute keys as stated in the table above. 
 
 ## Development
 During development the database schema can change. 
@@ -70,7 +107,7 @@ To update it without losing all the data you can use the configuration script on
 ./configure.sh --update
 ```
 
-`--update` updates the database, wipes caches, creates symlinks and compiles resources (css).
+`--update` updates the database, wipes caches, creates symlinks and compiles resources (css and js).
 If you want to clean the database and load fixtures, you should use `--upgrade`. 
 You can combinate these two modes with `--composer` to get the latest composer version aswell as updated dependencies.
 

@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Yaml\Yaml;
 
 class ApiV1Controller extends Controller {
 
@@ -20,6 +21,8 @@ class ApiV1Controller extends Controller {
     private $em;
 
     /**
+     * If sensor can trigger this action he is already authenticated.
+     *
      * @Security("has_role('ROLE_SENSOR')")
      * @param Request $request
      * @param UserInterface $sensor
@@ -31,10 +34,6 @@ class ApiV1Controller extends Controller {
 
         $this->em = $this->getDoctrine()->getManager();
 
-        // Check for authentication
-        # $sensor = null;
-        # if(($sensor = $this->isAuthenticated($request->request)) === null) return new JsonResponse(['error' => 'Not authenticated.'], 403);
-
         $data = new Data();
         $data->setSensor($sensor);
         $this->retrieveData($data, new ParameterBag(json_decode($request->getContent(), true)));
@@ -45,60 +44,63 @@ class ApiV1Controller extends Controller {
     }
 
     /**
-     * Check if the passed token is valid and correctly associated to the sensor.
-     * @param ParameterBag $request
-     * @return object
-     */
-    private function isAuthenticated(ParameterBag $request) {
-        $sensor = $this->em->getRepository(Sensor::class)->findOneBy(['id' => $request->getInt('id')]);
-
-        if($sensor != null) {
-            return ($sensor->getToken() === $request->getAlnum('token')) ? $sensor : null;
-        }
-
-        return null;
-    }
-
-    /**
-     * Validates of strictly required data is present.
-     * @param ParameterBag $request
-     * @return bool
-     */
-    private function validateStructure(ParameterBag $request) {
-        // Check for sensor ID and token
-        return
-            $request->get('token') != null &&
-            $request->get('id') != null &&
-            is_string($request->get('token')) &&
-            is_numeric($request->get('id'))
-        ;
-    }
-
-    /**
      * Fetches the data out of the parameter bag if available
      * @param Data $data
      * @param ParameterBag $request
      * @return Data
      */
     private function retrieveData(Data $data, ParameterBag $request) {
-        $data->setADC0($request->get('adc0'));
-        $data->setADC1($request->get('adc1'));
-        $data->setADC2($request->get('adc2'));
-        $data->setADC3($request->get('adc3'));
-        $data->setADC4($request->get('adc4'));
-        $data->setADC5($request->get('adc5'));
-        $data->setADC6($request->get('adc6'));
-        $data->setADC7($request->get('adc7'));
-        $data->setLatitude($request->get('latitude'));
-        $data->setLongitude($request->get('longitude'));
-        $data->setElevation($request->get('elevation'));
-        $data->setTemp($request->get('temp'));
-        $data->setMoist($request->get('moist'));
-        $data->setPressure($request->get('pressure'));
-        $data->setSpeed($request->get('speed'));
-        $data->setDate($request->get('date'));
-        $data->setTime($request->get('time'));
+        $mapping = $this->processMapping($data->getSensor());
+
+        $data->setADC0($this->fetch($request, 'adc0', $mapping));
+        $data->setADC1($this->fetch($request, 'adc1', $mapping));
+        $data->setADC2($this->fetch($request, 'adc2', $mapping));
+        $data->setADC3($this->fetch($request, 'adc3', $mapping));
+        $data->setADC4($this->fetch($request, 'adc4', $mapping));
+        $data->setADC5($this->fetch($request, 'adc5', $mapping));
+        $data->setADC6($this->fetch($request, 'adc6', $mapping));
+        $data->setADC7($this->fetch($request, 'adc7', $mapping));
+        $data->setLatitude($this->fetch($request, 'latitude', $mapping));
+        $data->setLongitude($this->fetch($request, 'longitude', $mapping));
+        $data->setElevation($this->fetch($request, 'elevation', $mapping));
+        $data->setTemp($this->fetch($request, 'temp', $mapping));
+        $data->setMoist($this->fetch($request, 'moist', $mapping));
+        $data->setPressure($this->fetch($request, 'pressure', $mapping));
+        $data->setSpeed($this->fetch($request, 'speed', $mapping));
+        $data->setDate($this->fetch($request, 'date', $mapping));
+        $data->setTime($this->fetch($request, 'time', $mapping));
 
         return $data;
+    }
+
+    /**
+     * @param Sensor $sensor
+     * @return array
+     */
+    private function processMapping(Sensor $sensor) {
+        if($sensor->getSensorType() == null) return [];
+        $mapping = $sensor->getSensorType()->getMapping();
+
+        // Without mapping take the defaults
+        if($mapping == '') return [];
+
+        return Yaml::parse($mapping);
+    }
+
+    /**
+     * @param ParameterBag $request
+     * @param $key
+     * @param $mapping
+     * @return mixed|null
+     */
+    private function fetch(ParameterBag $request, $key, $mapping) {
+        if(array_key_exists($key, $mapping)) {
+            return $request->get($mapping[$key]);
+        } else {
+            // Without mapping take the defaults if the value wasnt used already
+            if(!in_array($key, $mapping)) {
+                return $request->get($key);
+            } else return null;
+        }
     }
 }
