@@ -34,7 +34,7 @@
         </div>
         <div class="panel-body">
             <form method = "get" action = "{{ url('delete_all') }}">
-                <button type = "submit" class = "btn btn-danger btn-block" onclick = "return confirm('Do you really want to delete all received data?')">
+                <button type = "submit" class = "delete disabled btn btn-danger btn-block">
                     <i class = "fa fa-trash"></i> Delete all data
                 </button>
             </form>
@@ -48,7 +48,7 @@
                         {% endfor %}
                     </select>
 
-                    <button type = "submit" class = "btn btn-danger btn-block" onclick = "return confirm('Do you really want to delete all received data of this type of sensor?')">
+                    <button type = "submit" class = "delete disabled btn btn-danger btn-block">
                         <i class = "fa fa-ban"></i> Delete all data of this type
                     </button>
                 </form>
@@ -56,3 +56,23 @@
         </ul>
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('button.delete').click(function(event) {
+            if($(this).hasClass('disabled')) {
+                const self = this;
+                $(this).removeClass('disabled')
+                event.stopPropagation();
+
+                setTimeout(function() {
+                    $(self).addClass('disabled')
+                }, 3000)
+
+                return false;
+            } else {
+                return confirm('Do you really want to delete the data? This action is not revertible!')
+            }
+        })
+    })
+</script>
