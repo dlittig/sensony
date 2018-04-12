@@ -25,7 +25,7 @@ class ApiV1Controller extends Controller {
      *
      * @Security("has_role('ROLE_SENSOR')")
      * @param Request $request
-     * @param UserInterface $sensor
+     * @param UserInterface|Sensor $sensor
      * @return JsonResponse
      */
     public function dataAction(Request $request, UserInterface $sensor) {

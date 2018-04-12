@@ -27,4 +27,32 @@
             </li>
         </ul>
     </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Cleanup</h3>
+        </div>
+        <div class="panel-body">
+            <form method = "get" action = "{{ url('delete_all') }}">
+                <button type = "submit" class = "btn btn-danger btn-block" onclick = "return confirm('Do you really want to delete all received data?')">
+                    <i class = "fa fa-trash"></i> Delete all data
+                </button>
+            </form>
+        </div>
+        <ul class="list-group" style="margin-left: 0">
+            <li class="list-group-item">
+                <form method = "get" action = "{{ url('delete_of_type') }}">
+                    <select class = "form-control" style="margin-bottom: 10px" name = "type">
+                        {% for sensorType in sensorTypes %}
+                            <option value = "{{ sensorType.id }}">{{ sensorType.name }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <button type = "submit" class = "btn btn-danger btn-block" onclick = "return confirm('Do you really want to delete all received data of this type of sensor?')">
+                        <i class = "fa fa-ban"></i> Delete all data of this type
+                    </button>
+                </form>
+            </li>
+        </ul>
+    </div>
 </div>

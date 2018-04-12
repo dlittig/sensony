@@ -53,6 +53,7 @@ class AdminController extends BaseAdminController {
         $recentTimestamp = $em->getRepository('AppBundle:Data')->getRecentDateTime();
         $sensorCount = $em->getRepository('AppBundle:Sensor')->getSensorCount();
         $data = $em->getRepository('AppBundle:Data')->getRecent(['temp', 'pressure'], 10);
+        $sensorTypes = $em->getRepository('AppBundle:SensorType')->findAll();
 
         $recentTimestamp = (count($recentTimestamp) > 0) ? $recentTimestamp : null;
 
@@ -60,7 +61,8 @@ class AdminController extends BaseAdminController {
             'dataCount' => $dataCount[0]['amount'],
             'sensorCount' => $sensorCount[0]['amount'],
             'data' => $data,
-            'recentTimestamp' => $recentTimestamp[0]
+            'recentTimestamp' => $recentTimestamp[0],
+            'sensorTypes' => $sensorTypes
         ]);
     }
 
@@ -71,9 +73,9 @@ class AdminController extends BaseAdminController {
      * @param Request $request
      * @return StreamedResponse
      */
-    public function exportAction(Request $request, LoggerInterface $logger) {
+    public function exportAction(Request $request) {
         $response = new StreamedResponse();
-        $response->setCallback(function() use ($request, $logger) {
+        $response->setCallback(function() use ($request) {
             $handle = fopen('php://output', 'w+');
 
             $em = $this->getDoctrine()->getManager();
@@ -124,6 +126,48 @@ class AdminController extends BaseAdminController {
         $response->headers->set('Content-Disposition', 'attachment; filename="export.csv"');
 
         return $response;
+    }
+
+    /**
+     * @Route("/delete", name="delete_all")
+     * @Security("has_role('ROLE_ADMIN')")
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function ajaxDeleteAllAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $data = $em->getRepository('AppBundle:Data')->findAll();
+
+        foreach ($data as $item) {
+            $em->remove($item);
+        }
+
+        $em->flush();
+
+        return $this->redirectToRoute('admin_dashboard');
+    }
+
+    /**
+     * @Route("/delete_type", name="delete_of_type")
+     * @Security("has_role('ROLE_ADMIN')")
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function ajaxDeleteOfTypeAction(Request $request) {
+        $type = $request->get('type');
+        $em = $this->getDoctrine()->getManager();
+
+        // Get all sensors by sensor type and then the corresponding data
+        $sensors = $em->getRepository('AppBundle:Sensor')->findBy(['sensorType' => $type]);
+        $data = $em->getRepository('AppBundle:Data')->findBy(['sensor' => $sensors]);
+
+        foreach ($data as $item) {
+            $em->remove($item);
+        }
+
+        $em->flush();
+
+        return $this->redirectToRoute('admin_dashboard');
     }
 
 }
