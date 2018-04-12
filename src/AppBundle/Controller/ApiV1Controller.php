@@ -33,6 +33,13 @@ class ApiV1Controller extends Controller {
 
         $this->em = $this->getDoctrine()->getManager();
 
+        // Update type with latest request
+        $type = $sensor->getSensorType();
+        if($type->getRequest() === '') {
+            $type->setRequest($request->getContent());
+            $this->em->persist($type);
+        }
+
         $data = new Data();
         $data->setSensor($sensor);
 

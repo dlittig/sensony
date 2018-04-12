@@ -1,3 +1,7 @@
 div.spaced.checkbox label {
     margin-bottom: 10px;
 }
+
+div.request_json .form-control {
+    white-space: pre;
+}

@@ -111,4 +111,33 @@ class SensorType {
     {
         return $this->mapping;
     }
+    /**
+     * @var string
+     */
+    private $request;
+
+
+    /**
+     * Set request
+     *
+     * @param string $request
+     *
+     * @return SensorType
+     */
+    public function setRequest($request)
+    {
+        $this->request = $request;
+
+        return $this;
+    }
+
+    /**
+     * Get request
+     *
+     * @return string
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
 }

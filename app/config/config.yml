@@ -75,13 +75,14 @@ easy_admin:
     design:
         color_scheme: 'dark'
         menu:
-            - { label: 'Dashboard', route: 'admin_dashboard', default: true }
-            - Sensor
-            - SensorType
-            - Data
+            - { label: 'Dashboard', route: 'admin_dashboard', default: true, icon: 'dashboard' }
+            - { entity: 'Sensor', icon: 'thermometer-3' }
+            - { entity: 'SensorType', icon: 'microchip' }
+            - { entity: 'Data', icon: 'database' }
             - { label: 'Version: 0.0.%version%' }
         assets:
             css: ['/css/admin_dashboard.css']
+            js: ['/js/admin_pretty_json.js']
     list:
         actions: ['show', 'edit', 'search', 'delete', 'new']
     entities:
@@ -96,6 +97,16 @@ easy_admin:
                 fields: ['name', 'description', 'longitude', 'latitude', 'uuid', 'sensorType', 'token']
         SensorType:
             class: AppBundle\Entity\SensorType
+            new:
+                fields: ['name', 'description', 'mapping']
+            show:
+                fields:
+                    - name
+                    - description
+                    - mapping
+                    - { property: 'request', css_class: 'request_json',type_options: { disabled: true } }
+            edit:
+                fields: ['name', 'description', 'mapping', 'request']
         Data:
             class: AppBundle\Entity\Data
             list:
