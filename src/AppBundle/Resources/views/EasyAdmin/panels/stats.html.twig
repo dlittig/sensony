@@ -18,7 +18,7 @@
             <li class="list-group-item">
                 <span class="badge">
                     {% if recentTimestamp is not null %}
-                        {{ recentTimestamp['date']|date('d.m.Y') ~ ' ' ~ recentTimestamp['time']|date('h:i') }}
+                        {{ recentTimestamp['date']|date('d.m.Y') ~ ' ' ~ recentTimestamp['time']|date('H:i') }}
                     {% else %}
                         No submission
                     {% endif %}

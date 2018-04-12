@@ -29,14 +29,16 @@ class ApiV1Controller extends Controller {
      * @return JsonResponse
      */
     public function dataAction(Request $request, UserInterface $sensor) {
-        //if(!$this->validateStructure($request->request)) return new JsonResponse(['error' => 'Invalid data.'], 400);
         if ($sensor === null) return new JsonResponse(['error' => 'Invalid data.'], 400);
 
         $this->em = $this->getDoctrine()->getManager();
 
         $data = new Data();
         $data->setSensor($sensor);
-        $this->retrieveData($data, new ParameterBag(json_decode($request->getContent(), true)));
+
+        $values = json_decode($request->getContent(), true);
+        $this->retrieveData($data, $values['sensordatavalues']);
+
         $this->em->persist($data);
         $this->em->flush();
 
@@ -46,29 +48,67 @@ class ApiV1Controller extends Controller {
     /**
      * Fetches the data out of the parameter bag if available
      * @param Data $data
-     * @param ParameterBag $request
+     * @param array $request
      * @return Data
      */
-    private function retrieveData(Data $data, ParameterBag $request) {
+    private function retrieveData(Data $data, Array $request) {
         $mapping = $this->processMapping($data->getSensor());
 
-        $data->setADC0($this->fetch($request, 'adc0', $mapping));
-        $data->setADC1($this->fetch($request, 'adc1', $mapping));
-        $data->setADC2($this->fetch($request, 'adc2', $mapping));
-        $data->setADC3($this->fetch($request, 'adc3', $mapping));
-        $data->setADC4($this->fetch($request, 'adc4', $mapping));
-        $data->setADC5($this->fetch($request, 'adc5', $mapping));
-        $data->setADC6($this->fetch($request, 'adc6', $mapping));
-        $data->setADC7($this->fetch($request, 'adc7', $mapping));
-        $data->setLatitude($this->fetch($request, 'latitude', $mapping));
-        $data->setLongitude($this->fetch($request, 'longitude', $mapping));
-        $data->setElevation($this->fetch($request, 'elevation', $mapping));
-        $data->setTemp($this->fetch($request, 'temp', $mapping));
-        $data->setMoist($this->fetch($request, 'moist', $mapping));
-        $data->setPressure($this->fetch($request, 'pressure', $mapping));
-        $data->setSpeed($this->fetch($request, 'speed', $mapping));
-        $data->setDate($this->fetch($request, 'date', $mapping));
-        $data->setTime($this->fetch($request, 'time', $mapping));
+        $this->fetch($request, $mapping, function($key, $value) use ($data) {
+            switch($key) {
+                case 'adc0':
+                    $data->setADC0(intval($value));
+                    break;
+                case 'adc1':
+                    $data->setADC1(intval($value));
+                    break;
+                case 'adc2':
+                    $data->setADC2(intval($value));
+                    break;
+                case 'adc3':
+                    $data->setADC3(intval($value));
+                    break;
+                case 'adc4':
+                    $data->setADC4(intval($value));
+                    break;
+                case 'adc5':
+                    $data->setADC5(intval($value));
+                    break;
+                case 'adc6':
+                    $data->setADC6(intval($value));
+                    break;
+                case 'adc7':
+                    $data->setADC7(intval($value));
+                    break;
+                case 'latitude':
+                    $data->setLatitude(intval($value));
+                    break;
+                case 'longitude':
+                    $data->setLongitude(intval($value));
+                    break;
+                case 'elevation':
+                    $data->setElevation(intval($value));
+                    break;
+                case 'temp':
+                    $data->setTemp(intval($value));
+                    break;
+                case 'moist':
+                    $data->setMoist(intval($value));
+                    break;
+                case 'pressure':
+                    $data->setPressure(intval($value));
+                    break;
+                case 'speed':
+                    $data->setSpeed(intval($value));
+                    break;
+                case 'time':
+                    $data->setTime($value);
+                    break;
+                case 'date':
+                    $data->setDate($value);
+                    break;
+            }
+        });
 
         return $data;
     }
@@ -88,19 +128,26 @@ class ApiV1Controller extends Controller {
     }
 
     /**
+     * Iterates through the request and calls the callback for each result
      * @param ParameterBag $request
-     * @param $key
      * @param $mapping
+     * @param $callback
      * @return mixed|null
      */
-    private function fetch(ParameterBag $request, $key, $mapping) {
-        if(array_key_exists($key, $mapping)) {
-            return $request->get($mapping[$key]);
-        } else {
-            // Without mapping take the defaults if the value wasnt used already
-            if(!in_array($key, $mapping)) {
-                return $request->get($key);
-            } else return null;
+    private function fetch($request, $mapping, $callback) {
+        foreach($request as $item) {
+            $keys = array_keys($mapping, $item['value_type']);
+
+            // Mapping found
+            if(count($keys) > 0) {
+                foreach ($keys as $key) {
+                    // Use mapped attribute
+                    $callback($key, $item['value']);
+                }
+            } else {
+                // No mapping found, take defaults
+                $callback($item['value_type'], $item['value']);
+            }
         }
     }
 }
