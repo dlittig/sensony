@@ -1,6 +1,7 @@
 $(document).ready(function() {
     const element = $('div.request_json > * > div.form-control')
     if($(element).length === 0) return
+    if($(element).text() === 'NULL') return
 
     const text = $(element).text()
     const obj = JSON.parse(text)

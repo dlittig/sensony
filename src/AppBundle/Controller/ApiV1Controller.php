@@ -35,7 +35,7 @@ class ApiV1Controller extends Controller {
 
         // Update type with latest request
         $type = $sensor->getSensorType();
-        if($type->getRequest() === '') {
+        if($type->getRequest() === '' || $type->getRequest() === null) {
             $type->setRequest($request->getContent());
             $this->em->persist($type);
         }
