@@ -50,9 +50,18 @@ setup process of your sensor.
 Example JSON that is accepted by the API:
 ```
 {
-	"speed" : 249.0,
-	"temp" : 23.3,
-	"pressure" : 1011
+	"sensordatavalues": [
+		{
+			"value_type": "temperature",
+			"value": "21.90"
+		}, {
+			"value_type": "humidity",
+			"value": "29.10"
+		}, {
+			"value_type": "pressure",
+			"value": "1100.00"
+		}
+	]
 }
 ```
 
