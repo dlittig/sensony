@@ -61,7 +61,7 @@ Example JSON that is accepted by the API:
 	  "value_type": "pressure",
 	  "value": "1100.00"
 	}
-  }
+  ]
 }
 ```
 

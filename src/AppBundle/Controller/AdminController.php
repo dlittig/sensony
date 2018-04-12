@@ -99,9 +99,13 @@ class AdminController extends BaseAdminController {
                     if($value === 'Sensor') {
                         $row[] = ($item->getSensor() != null) ? $item->getSensor()->__toString() : 'No sensor assigned.';
                     } else if($value === 'Time') {
-                        $row[] = $item->{'get'.$value}()->format('h:i');
+                        if($item->{'get'.$value}()) {
+                            $row[] = $item->{'get' . $value}()->format('H:i');
+                        } else $row[] = null;
                     } else if($value === 'Date') {
-                        $row[] = $item->{'get'.$value}()->format('d.m.Y');
+                        if($item->{'get'.$value}()) {
+                            $row[] = $item->{'get' . $value}()->format('d.m.Y');
+                        } else $row[] = null;
                     } else $row[] = $item->{'get'.$value}(); // Use the getter by the passed form data string
                 }
 
