@@ -84,12 +84,15 @@ The mapping offers to translate the following attributes:
 | `adc5`         |
 | `adc6`         |
 | `adc7`         |
+| `sdsp1`        |
+| `sdsp2`        |
 | `latitude`     |
 | `longitude`    |
 | `elevation`    |
 | `temp`         |
 | `moist`        |
 | `pressure`     |
+| `humidity`     |
 | `speed`        |
 | `date`         |
 | `time`         |

@@ -46,6 +46,14 @@ class ApiV1Controller extends Controller {
         $values = json_decode($request->getContent(), true);
         $this->retrieveData($data, $values['sensordatavalues']);
 
+        if($data->getTime() === null) {
+            $data->setTime(new \DateTime('now'));
+        }
+
+        if($data->getDate() === null) {
+            $data->setDate(new \DateTime('now'));
+        }
+
         $this->em->persist($data);
         $this->em->flush();
 
@@ -107,6 +115,15 @@ class ApiV1Controller extends Controller {
                     break;
                 case 'speed':
                     $data->setSpeed(intval($value));
+                    break;
+                case 'humidity':
+                    $data->setHumidity(intval($value));
+                    break;
+                case 'sdsp1':
+                    $data->setSDSP1(intval($value));
+                    break;
+                case 'sdsp2':
+                    $data->setSDSP2(intval($value));
                     break;
                 case 'time':
                     $data->setTime($value);

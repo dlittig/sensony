@@ -47,6 +47,9 @@ AppBundle\Entity\Data:
         pressure:
             type: float
             nullable: true
+        humidity:
+            type: float
+            nullable: true
         ADC0:
             type: float
             nullable: true
@@ -69,5 +72,11 @@ AppBundle\Entity\Data:
             type: float
             nullable: true
         ADC7:
+            type: float
+            nullable: true
+        SDS_P1:
+            type: float
+            nullable: true
+        SDS_P2:
             type: float
             nullable: true

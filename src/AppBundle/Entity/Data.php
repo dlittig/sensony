@@ -60,6 +60,21 @@ class Data
     /**
      * @var float
      */
+    private $humidity;
+
+    /**
+     * @var float
+     */
+    private $SDS_P1;
+
+    /**
+     * @var float
+     */
+    private $SDS_P2;
+
+    /**
+     * @var float
+     */
     private $ADC0;
 
     /**
@@ -543,5 +558,77 @@ class Data
     public function getSensor()
     {
         return $this->sensor;
+    }
+
+    /**
+     * Set humidity
+     *
+     * @param float $humidity
+     *
+     * @return Data
+     */
+    public function setHumidity($humidity)
+    {
+        $this->humidity = $humidity;
+
+        return $this;
+    }
+
+    /**
+     * Get humidity
+     *
+     * @return float
+     */
+    public function getHumidity()
+    {
+        return $this->humidity;
+    }
+
+    /**
+     * Set sDSP1
+     *
+     * @param float $sDSP1
+     *
+     * @return Data
+     */
+    public function setSDSP1($sDSP1)
+    {
+        $this->SDS_P1 = $sDSP1;
+
+        return $this;
+    }
+
+    /**
+     * Get sDSP1
+     *
+     * @return float
+     */
+    public function getSDSP1()
+    {
+        return $this->SDS_P1;
+    }
+
+    /**
+     * Set sDSP2
+     *
+     * @param float $sDSP2
+     *
+     * @return Data
+     */
+    public function setSDSP2($sDSP2)
+    {
+        $this->SDS_P2 = $sDSP2;
+
+        return $this;
+    }
+
+    /**
+     * Get sDSP2
+     *
+     * @return float
+     */
+    public function getSDSP2()
+    {
+        return $this->SDS_P2;
     }
 }
