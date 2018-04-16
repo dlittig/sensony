@@ -25,7 +25,7 @@ class DataRepository extends \Doctrine\ORM\EntityRepository {
         $query = $this->createQueryBuilder('data')
             ->select()
             ->setMaxResults($max)
-            ->orderBy('data.id', 'ASC');
+            ->orderBy('data.id', 'DESC');
 
         foreach($items as $item) {
             $query->andWhere('data.'. $item .' IS NOT NULL');

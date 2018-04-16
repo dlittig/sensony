@@ -17,7 +17,7 @@
             data: {
                 labels: [
                     {% for item in data %}
-                    "{{ item.time|date('h:i') }}",
+                    "{{ item.time|date('H:i') }}",
                     {% endfor %}
                 ],
                 datasets: [{
