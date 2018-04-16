@@ -60,7 +60,7 @@ class AdminController extends BaseAdminController {
         return $this->render('AppBundle:EasyAdmin:dashboard.html.twig', [
             'dataCount' => $dataCount[0]['amount'],
             'sensorCount' => $sensorCount[0]['amount'],
-            'data' => $data,
+            'data' => array_reverse($data),
             'recentTimestamp' => $recentTimestamp[0],
             'sensorTypes' => $sensorTypes
         ]);
