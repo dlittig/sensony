@@ -72,58 +72,58 @@ class ApiV1Controller extends Controller {
         $this->fetch($request, $mapping, function($key, $value) use ($data) {
             switch($key) {
                 case 'adc0':
-                    $data->setADC0(intval($value));
+                    $data->setADC0(floatval($value));
                     break;
                 case 'adc1':
-                    $data->setADC1(intval($value));
+                    $data->setADC1(floatval($value));
                     break;
                 case 'adc2':
-                    $data->setADC2(intval($value));
+                    $data->setADC2(floatval($value));
                     break;
                 case 'adc3':
-                    $data->setADC3(intval($value));
+                    $data->setADC3(floatval($value));
                     break;
                 case 'adc4':
-                    $data->setADC4(intval($value));
+                    $data->setADC4(floatval($value));
                     break;
                 case 'adc5':
-                    $data->setADC5(intval($value));
+                    $data->setADC5(floatval($value));
                     break;
                 case 'adc6':
-                    $data->setADC6(intval($value));
+                    $data->setADC6(floatval($value));
                     break;
                 case 'adc7':
-                    $data->setADC7(intval($value));
+                    $data->setADC7(floatval($value));
                     break;
                 case 'latitude':
-                    $data->setLatitude(intval($value));
+                    $data->setLatitude(floatval($value));
                     break;
                 case 'longitude':
-                    $data->setLongitude(intval($value));
+                    $data->setLongitude(floatval($value));
                     break;
                 case 'elevation':
-                    $data->setElevation(intval($value));
+                    $data->setElevation(floatval($value));
                     break;
                 case 'temp':
-                    $data->setTemp(intval($value));
+                    $data->setTemp(floatval($value));
                     break;
                 case 'moist':
-                    $data->setMoist(intval($value));
+                    $data->setMoist(floatval($value));
                     break;
                 case 'pressure':
-                    $data->setPressure(intval($value));
+                    $data->setPressure(floatval($value));
                     break;
                 case 'speed':
-                    $data->setSpeed(intval($value));
+                    $data->setSpeed(floatval($value));
                     break;
                 case 'humidity':
-                    $data->setHumidity(intval($value));
+                    $data->setHumidity(floatval($value));
                     break;
                 case 'sdsp1':
-                    $data->setSDSP1(intval($value));
+                    $data->setSDSP1(floatval($value));
                     break;
                 case 'sdsp2':
-                    $data->setSDSP2(intval($value));
+                    $data->setSDSP2(floatval($value));
                     break;
                 case 'time':
                     $data->setTime($value);
