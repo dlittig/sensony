@@ -126,10 +126,10 @@ class ApiV1Controller extends Controller {
                     $data->setSDSP2(floatval($value));
                     break;
                 case 'time':
-                    $data->setTime($value);
+                    $data->setTime(new \DateTime($value, new \DateTimeZone('UTC')));
                     break;
                 case 'date':
-                    $data->setDate($value);
+                    $data->setDate(new \DateTime($value, new \DateTimeZone('UTC')));
                     break;
             }
         });

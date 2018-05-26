@@ -41,14 +41,14 @@ class DataRepository extends \Doctrine\ORM\EntityRepository {
      */
     public function getLimited(\DateTime $dateTimeStart, \DateTime $dateTimeEnd) {
         return $this->createQueryBuilder('data')
-            ->select()
+            ->select('data')
             ->where('data.time BETWEEN :timeStart AND :timeEnd')
             ->andWhere('data.date BETWEEN :dateStart AND :dateEnd')
             ->setParameters([
-                'timeStart' => $dateTimeStart,
-                'dateStart' => $dateTimeStart,
-                'timeEnd' => $dateTimeEnd,
-                'dateEnd' => $dateTimeEnd
+                'timeStart' => $dateTimeStart->format('H:i'),
+                'dateStart' => $dateTimeStart->format('Y-m-d'),
+                'timeEnd' => $dateTimeEnd->format('H:i'),
+                'dateEnd' => $dateTimeEnd->format('Y-m-d')
             ])
             ->orderBy('data.id', 'ASC')
             ->getQuery()
