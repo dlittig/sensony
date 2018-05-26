@@ -71,6 +71,34 @@
 <div class="col-xs-12 col-md-9">
     <div>
         <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title inline">Historie</h3>
+                <select class="form-control input-sm inline normal-width pull-right" name="" style="margin-top: -5px">
+                    <option value="" disabled selected>Choose attribute...</option>
+                    <option value="Elevation">Elevation</option>
+                    <option value="Speed">Speed</option>
+                    <option value="Temp">Temperature</option>
+                    <option value="Moist">Moist</option>
+                    <option value="Pressure">Pressure</option>
+                    <option value="Humidity">Humidty</option>
+                    <option value="ADC0">ADC0</option>
+                    <option value="ADC1">ADC1</option>
+                    <option value="ADC2">ADC2</option>
+                    <option value="ADC3">ADC3</option>
+                    <option value="ADC4">ADC4</option>
+                    <option value="ADC5">ADC5</option>
+                    <option value="ADC6">ADC6</option>
+                    <option value="ADC7">ADC7</option>
+                    <option value="SDSP1">SDSP1 (PM10)</option>
+                    <option value="SDSP2">SDSP2 (PM2.5)</option>
+                </select>
+                <select class="form-control input-sm inline normal-width pull-right" name="" style="margin-top: -5px">
+                    <option value="" disabled selected>Choose sensor...</option>
+                    {% for sensor in sensors %}
+                        <option value="{{ sensor.id }}">#{{ sensor.id }} {{ sensor.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
             <div class="panel-body">
                 <canvas id = "canvas"></canvas>
             </div>

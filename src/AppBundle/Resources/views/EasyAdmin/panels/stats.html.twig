@@ -79,6 +79,8 @@
 <script>
     function getSensorStatus() {
         document.querySelector('#refreshStatus').removeEventListener('click', getSensorStatus)
+        $('#result').addClass('hidden')
+        $('#sensor-status-loading').removeClass('hidden')
 
         $.ajax({
             url: '{{ url('status') }}',

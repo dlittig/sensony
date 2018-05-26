@@ -19,3 +19,7 @@ i.fa.fa-circle.red {
     background-color: transparent;
     border-color: lightgray;
 }
+
+.normal-width {
+    width: unset !important;
+}

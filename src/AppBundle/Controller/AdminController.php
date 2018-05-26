@@ -51,7 +51,7 @@ class AdminController extends BaseAdminController {
         $em = $this->getDoctrine()->getManager();
         $dataCount = $em->getRepository('AppBundle:Data')->getDataCount();
         $recentTimestamp = $em->getRepository('AppBundle:Data')->getRecentDateTime();
-        $sensorCount = $em->getRepository('AppBundle:Sensor')->getSensorCount();
+        $sensors = $em->getRepository('AppBundle:Sensor')->findAll();
         $data = $em->getRepository('AppBundle:Data')->getRecent(['temp', 'pressure'], 10);
         $sensorTypes = $em->getRepository('AppBundle:SensorType')->findAll();
 
@@ -59,7 +59,8 @@ class AdminController extends BaseAdminController {
 
         return $this->render('AppBundle:EasyAdmin:dashboard.html.twig', [
             'dataCount' => $dataCount[0]['amount'],
-            'sensorCount' => $sensorCount[0]['amount'],
+            'sensorCount' => count($sensors),
+            'sensors' => $sensors,
             'data' => array_reverse($data) ,
             'recentTimestamp' => $recentTimestamp[0],
             'sensorTypes' => $sensorTypes
