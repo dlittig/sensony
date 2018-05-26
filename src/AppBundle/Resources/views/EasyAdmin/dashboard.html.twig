@@ -8,12 +8,8 @@
 {% endblock %}
 {% block main %}
     <div class="row">
-        {% include 'AppBundle:EasyAdmin:panels/graph.html.twig' with { 'data' : data } %}
-
-        {% include 'AppBundle:EasyAdmin:panels/stats.html.twig' with { 'dataCount' : dataCount, 'sensorCount' : sensorCount, 'recentTimestamp': recentTimestamp } %}
+        {% include 'AppBundle:EasyAdmin:panels/graph.html.twig' with { 'data' : data, 'dataCount' : dataCount, 'sensorCount' : sensorCount, 'recentTimestamp': recentTimestamp } %}
 
         {% include 'AppBundle:EasyAdmin:panels/export.html.twig' %}
     </div>
-
-
 {% endblock %}

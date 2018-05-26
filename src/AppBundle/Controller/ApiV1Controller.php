@@ -47,11 +47,11 @@ class ApiV1Controller extends Controller {
         $this->retrieveData($data, $values['sensordatavalues']);
 
         if($data->getTime() === null) {
-            $data->setTime(new \DateTime('now'));
+            $data->setTime(new \DateTime('now', new \DateTimeZone('UTC')));
         }
 
         if($data->getDate() === null) {
-            $data->setDate(new \DateTime('now'));
+            $data->setDate(new \DateTime('now', new \DateTimeZone('UTC')));
         }
 
         $this->em->persist($data);

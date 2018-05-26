@@ -8,7 +8,7 @@ app:
 
 login:
     path:     /login
-    defaults: { _controller: "AppBundle:Start:index" }
+    defaults: { _controller: "AppBundle:Default:index" }
 
 logout:
     path: /logout

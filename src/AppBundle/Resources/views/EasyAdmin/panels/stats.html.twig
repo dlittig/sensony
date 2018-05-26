@@ -1,63 +1,105 @@
-<div class="col-xs-12 col-md-3">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Stats</h3>
+<div class="col-xs-12">
+    <div class = "row">
+        <div class="col-xs-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Stats</h3>
+                </div>
+                <div class="panel-body">
+                    <span>Displays relevant stats in a small overview</span>
+                </div>
+                <ul class="list-group" style="margin-left: 0;">
+                    <li class="list-group-item">
+                        <span class="badge">{{ dataCount }}</span>
+                        Data count
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge">{{ sensorCount }}</span>
+                        Sensor count
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge">
+                            {% if recentTimestamp is not null %}
+                                {{ recentTimestamp['date']|date('d.m.Y') ~ ' ' ~ recentTimestamp['time']|date('H:i') }}
+                            {% else %}
+                                No submission
+                            {% endif %}
+                        </span>
+                        Latest data submission
+                    </li>
+                </ul>
+            </div>
         </div>
-        <div class="panel-body">
-            <span>Displays relevant stats in a small overview</span>
-        </div>
-        <ul class="list-group" style="margin-left: 0;">
-            <li class="list-group-item">
-                <span class="badge">{{ dataCount }}</span>
-                Data count
-            </li>
-            <li class="list-group-item">
-                <span class="badge">{{ sensorCount }}</span>
-                Sensor count
-            </li>
-            <li class="list-group-item">
-                <span class="badge">
-                    {% if recentTimestamp is not null %}
-                        {{ recentTimestamp['date']|date('d.m.Y') ~ ' ' ~ recentTimestamp['time']|date('H:i') }}
-                    {% else %}
-                        No submission
-                    {% endif %}
-                </span>
-                Latest data submission
-            </li>
-        </ul>
-    </div>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Cleanup</h3>
+        <div class="col-xs-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title inline">Sensor status</h3>
+                    <button id="refreshStatus" class="btn btn-transparent btn-xs pull-right"><i class="fa fa-repeat"></i></button>
+                </div>
+                <div class="panel-body">
+                    <span id="sensor-status-loading" class="text-center center-block">Loading&nbsp;<span class="fa fa-spin fa-refresh"></span></span>
+                    <div id="result" class="hidden"></div>
+                </div>
+            </div>
         </div>
-        <div class="panel-body">
-            <form method = "get" action = "{{ url('delete_all') }}">
-                <button type = "submit" class = "delete disabled btn btn-danger btn-block">
-                    <i class = "fa fa-trash"></i> Delete all data
-                </button>
-            </form>
-        </div>
-        <ul class="list-group" style="margin-left: 0">
-            <li class="list-group-item">
-                <form method = "get" action = "{{ url('delete_of_type') }}">
-                    <select class = "form-control" style="margin-bottom: 10px" name = "type">
-                        {% for sensorType in sensorTypes %}
-                            <option value = "{{ sensorType.id }}">{{ sensorType.name }}</option>
-                        {% endfor %}
-                    </select>
 
-                    <button type = "submit" class = "delete disabled btn btn-danger btn-block">
-                        <i class = "fa fa-ban"></i> Delete all data of this type
-                    </button>
-                </form>
-            </li>
-        </ul>
+        <div class="col-xs-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Cleanup</h3>
+                </div>
+                <div class="panel-body">
+                    <form method = "get" action = "{{ url('delete_all') }}">
+                        <button type = "submit" class = "delete disabled btn btn-danger btn-block">
+                            <i class = "fa fa-trash"></i> Delete all data
+                        </button>
+                    </form>
+                </div>
+                <ul class="list-group" style="margin-left: 0">
+                    <li class="list-group-item">
+                        <form method = "get" action = "{{ url('delete_of_type') }}">
+                            <select class = "form-control" style="margin-bottom: 10px" name = "type">
+                                {% for sensorType in sensorTypes %}
+                                    <option value = "{{ sensorType.id }}">{{ sensorType.name }}</option>
+                                {% endfor %}
+                            </select>
+
+                            <button type = "submit" class = "delete disabled btn btn-danger btn-block">
+                                <i class = "fa fa-ban"></i> Delete all data of this type
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
+    function getSensorStatus() {
+        document.querySelector('#refreshStatus').removeEventListener('click', getSensorStatus)
+
+        $.ajax({
+            url: '{{ url('status') }}',
+            method: 'get'
+        }).then(function (result) {
+            const container = $('#result')
+            $(container).html('')
+
+            result.forEach(function (item) {
+                $(container).append('<p data-toggle="tooltip" data-placement="left" title="UUID: ' + item.uuid + '"><i class = "fa fa-circle ' + (item.up ? 'green' : 'red') + '"></i> <strong>#' + item.id + '</strong> ' + item.name + '</p>')
+            })
+
+            $('[data-toggle="tooltip"]').tooltip()
+
+            $('#sensor-status-loading').addClass('hidden')
+            $(container).removeClass('hidden')
+
+            document.querySelector('#refreshStatus').addEventListener('click', getSensorStatus)
+        })
+    }
+
     $(document).ready(function() {
         $('button.delete').click(function(event) {
             if($(this).hasClass('disabled')) {
@@ -74,5 +116,8 @@
                 return confirm('Do you really want to delete the data? This action is not revertible!')
             }
         })
+
+        // Perform ajax call to fetch sensor status
+        window.setTimeout(getSensorStatus, 1000)
     })
 </script>

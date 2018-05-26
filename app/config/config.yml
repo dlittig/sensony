@@ -81,8 +81,8 @@ easy_admin:
             - { entity: 'Data', icon: 'database' }
             - { label: 'Version: 0.0.%version%' }
         assets:
-            css: ['/css/admin_dashboard.css']
-            js: ['/js/admin_pretty_json.js']
+            css: ['/css/admin_dashboard.css', '/css/bootstrap-datetimepicker.min.css']
+            js: ['/js/admin_pretty_json.js', '/js/bootstrap-datetimepicker.min.js']
     list:
         actions: ['show', 'edit', 'search', 'delete', 'new']
     entities:

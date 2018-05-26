@@ -60,7 +60,7 @@ class AdminController extends BaseAdminController {
         return $this->render('AppBundle:EasyAdmin:dashboard.html.twig', [
             'dataCount' => $dataCount[0]['amount'],
             'sensorCount' => $sensorCount[0]['amount'],
-            'data' => array_reverse($data),
+            'data' => array_reverse($data) ,
             'recentTimestamp' => $recentTimestamp[0],
             'sensorTypes' => $sensorTypes
         ]);
@@ -80,12 +80,9 @@ class AdminController extends BaseAdminController {
 
             $em = $this->getDoctrine()->getManager();
 
-            // Set the limit
-            if($request->request->getAlnum('amount') === 'all') {
-                $data = $em->getRepository('AppBundle:Data')->getMax(-1);
-            } else {
-                $data = $em->getRepository('AppBundle:Data')->getMax($request->request->getInt('amount'));
-            }
+            $start = new \DateTime($request->request->get('startDate'));
+            $end = new \DateTime($request->request->get('endDate'));
+            $data = $em->getRepository('AppBundle:Data')->getLimited($start, $end);
 
             // Add the header of the CSV file
             fputcsv(

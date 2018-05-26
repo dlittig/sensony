@@ -5,3 +5,17 @@ div.spaced.checkbox label {
 div.request_json .form-control {
     white-space: pre;
 }
+
+/* Sensor status */
+i.fa.fa-circle.green {
+    color: #4CAF50;
+}
+
+i.fa.fa-circle.red {
+    color: #D32F2F;
+}
+
+.btn-transparent {
+    background-color: transparent;
+    border-color: lightgray;
+}

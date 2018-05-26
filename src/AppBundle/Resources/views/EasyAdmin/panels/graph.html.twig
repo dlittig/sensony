@@ -47,7 +47,6 @@
                 }]
             },
             options: {
-                responsive: true,
                 scales: {
                     yAxes: [{
                         type: 'linear',
@@ -69,10 +68,18 @@
     })
 </script>
 
-<div class="col-xs-12 col-md-6">
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <canvas id = "canvas"></canvas>
+<div class="col-xs-12 col-md-9">
+    <div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <canvas id = "canvas"></canvas>
+            </div>
         </div>
     </div>
+    <div class = "row">
+        {% include 'AppBundle:EasyAdmin:panels/stats.html.twig' with { 'dataCount' : dataCount, 'sensorCount' : sensorCount, 'recentTimestamp': recentTimestamp } %}
+    </div>
 </div>
+
+
+

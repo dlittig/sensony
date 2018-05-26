@@ -34,15 +34,45 @@ class DataRepository extends \Doctrine\ORM\EntityRepository {
         return $query->getQuery()->getResult();
     }
 
-    public function getMax($max) {
+    /**
+     * @param \DateTime $dateTimeStart
+     * @param \DateTime $dateTimeEnd
+     * @return array
+     */
+    public function getLimited(\DateTime $dateTimeStart, \DateTime $dateTimeEnd) {
         return $this->createQueryBuilder('data')
             ->select()
-            ->setMaxResults($max)
+            ->where('data.time BETWEEN :timeStart AND :timeEnd')
+            ->andWhere('data.date BETWEEN :dateStart AND :dateEnd')
+            ->setParameters([
+                'timeStart' => $dateTimeStart,
+                'dateStart' => $dateTimeStart,
+                'timeEnd' => $dateTimeEnd,
+                'dateEnd' => $dateTimeEnd
+            ])
             ->orderBy('data.id', 'ASC')
             ->getQuery()
             ->getResult();
     }
 
+    /**
+     * @return array
+     */
+    public function getSensorStatus() {
+        return $this->createQueryBuilder('data')
+            ->join('data.sensor', 'sensor')
+            ->addSelect('sensor.id, sensor.name, sensor.uuid, data.date, data.time')
+            ->where('data.date IS NOT NULL')
+            ->andWhere('data.time IS NOT NULL')
+            ->orderBy('sensor.name', 'ASC')
+            ->groupBy('sensor.id')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return array
+     */
     public function getRecentDateTime() {
         return $this->createQueryBuilder('data')
             ->select('data.time, data.date')

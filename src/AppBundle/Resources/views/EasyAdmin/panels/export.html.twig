@@ -68,26 +68,54 @@
                         <input type="checkbox" checked value="ADC7" name="properties[]"> ADC7
                     </label>
                     <label>
-                        <input type="checkbox" checked value="SDSP1" name="properties[]"> SDSP1
+                        <input type="checkbox" checked value="SDSP1" name="properties[]"> SDSP1&nbsp;(PM10)
                     </label>
                     <label>
-                        <input type="checkbox" checked value="SDSP2" name="properties[]"> SDSP2
+                        <input type="checkbox" checked value="SDSP2" name="properties[]"> SDSP2&nbsp;(PM2.5)
                     </label>
                 </div>
 
-                <label>Amount of items to export:</label>
-                <select class="form-control" name="amount">
-                    <option value="25" selected>25</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
-                    <option value="all">All</option>
-                </select>
+                <div class = "form-group">
+                    <label>
+                        Start date:
+                    </label>
+                    <input placeholder="Click here to enter date..." required class="startDate form-control" name="startDate">
+                </div>
+
+                <div class = "form-group">
+                    <label>
+                        End date:
+                    </label>
+                    <input placeholder="Click here to enter date..." required class="endDate form-control" name="endDate">
+                </div>
+
+                <button type = "submit" class = "btn btn-primary btn-block"><i class="fa fa-download"></i> Export</button>
             </div>
-            <ul class="list-group" style="margin-left: 0;">
-                <li class="list-group-item">
-                    <button type = "submit" class = "btn btn-primary btn-block"><i class="fa fa-download"></i> Export</button>
-                </li>
-            </ul>
         </div>
     </form>
 </div>
+
+<script>
+    window.addEventListener('DOMContentLoaded', function() {
+        const parameters = {
+            format: 'yyyy-mm-dd hh:ii:ss Z',
+            timezone: 'UTC',
+            todayBtn: 'linked',
+            clearBtn: true,
+            autoclose: true,
+            weekStart: 1,
+            minuteStep: 15,
+            endDate: new Date(),
+            fontAwesome: true,
+            forceParse: false
+        }
+
+        $('.startDate').datetimepicker(parameters).on('changeDate', function(event) {
+            let selectedStartDate = event.date
+            $('.endDate').datetimepicker('remove')
+            $('.endDate').datetimepicker(Object.assign(parameters, {startDate: selectedStartDate}))
+        })
+
+        $('.endDate').datetimepicker(parameters)
+    })
+</script>
