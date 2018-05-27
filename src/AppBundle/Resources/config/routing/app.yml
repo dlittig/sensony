@@ -4,7 +4,12 @@ index:
 
 status:
     path:     /sensors/status
-    defaults: { _controller: "AppBundle:Default:status" }
+    defaults: { _controller: "AppBundle:Admin:status" }
+    methods:  [GET]
+
+graphData:
+    path:     /graph/data
+    defaults: { _controller: "AppBundle:Admin:graphData" }
 
 admin:
     resource: "@AppBundle/Controller/AdminController.php"

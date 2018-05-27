@@ -1,70 +1,63 @@
 <script src="{{ asset('js/Chart.bundle.min.js') }}"></script>
 <script>
-    $(document).ready(function() {
-        window.chartColors = {
-            red: 'rgb(255, 99, 132)',
-            orange: 'rgb(255, 159, 64)',
-            yellow: 'rgb(255, 205, 86)',
-            green: 'rgb(75, 192, 192)',
-            blue: 'rgb(54, 162, 235)',
-            purple: 'rgb(153, 102, 255)',
-            grey: 'rgb(201, 203, 207)'
-        };
+    window.chartColors = {
+        red: 'rgb(255, 99, 132)',
+        orange: 'rgb(255, 159, 64)',
+        yellow: 'rgb(255, 205, 86)',
+        green: 'rgb(75, 192, 192)',
+        blue: 'rgb(54, 162, 235)',
+        purple: 'rgb(153, 102, 255)',
+        grey: 'rgb(201, 203, 207)'
+    }
 
-        const ctx = document.getElementById("canvas").getContext('2d');
-        const chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: [
-                    {% for item in data %}
-                    "{{ item.time|date('H:i') }}",
-                    {% endfor %}
-                ],
-                datasets: [{
-                    label: 'Temp. in °C',
-                    data: [
-                        {% for item in data %}
-                        {{ item.temp }},
-                        {% endfor %}
-                    ],
-                    backgroundColor: window.chartColors.red,
-                    borderColor: window.chartColors.red,
-                    borderWidth: 1,
-                    fill: false,
-                    yAxisID: 'tempY'
-                }, {
-                    label: 'Pressure in mb',
-                    data: [
-                        {% for item in data %}
-                        {{ item.pressure }},
-                        {% endfor %}
-                    ],
-                    backgroundColor: window.chartColors.blue,
-                    borderColor: window.chartColors.blue,
-                    borderWidth: 1,
-                    fill: false,
-                    yAxisID: 'pressureY'
+    let configuration = {
+        type: 'line',
+        data: {
+            datasets: [{
+                label: 'Pressure in mb',
+                data: [],
+                backgroundColor: window.chartColors.blue,
+                borderColor: window.chartColors.blue,
+                borderWidth: 1,
+                fill: false,
+                yAxisID: 'axis'
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                    id: 'axis'
                 }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        type: 'linear',
-                        display: true,
-                        position: 'left',
-                        id: 'tempY'
-                    }, {
-                        type: 'linear',
-                        display: true,
-                        position: 'right',
-                        id: 'pressureY',
-                        gridLines: {
-                            drawOnChartArea: false
-                        }
-                    }]
-                }
             }
-        });
+        }
+    }
+
+    let chart = null
+
+    $(document).ready(function() {
+        const ctx = document.getElementById("canvas").getContext('2d')
+
+        $('[name="attribute"], [name="sensor"]').on('change', function() {
+            const attribute = $('[name="attribute"]').val()
+            const sensor = $('[name="sensor"]').val()
+            if(attribute !== null && sensor !== null) {
+                $.ajax({
+                    url: '{{ url('graphData') }}',
+                    method: 'post',
+                    data: {
+                        attribute: attribute,
+                        sensor: sensor
+                    }
+                }).then(function (response) {
+                    configuration.data.datasets[0].data = response
+                    configuration.data.datasets[0].label = attribute + ' of sensor ' + sensor
+                    chart = new Chart(ctx, configuration)
+                })
+            }
+        })
     })
 </script>
 
@@ -73,14 +66,14 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title inline">Historie</h3>
-                <select class="form-control input-sm inline normal-width pull-right" name="" style="margin-top: -5px">
-                    <option value="" disabled selected>Choose attribute...</option>
-                    <option value="Elevation">Elevation</option>
-                    <option value="Speed">Speed</option>
-                    <option value="Temp">Temperature</option>
-                    <option value="Moist">Moist</option>
-                    <option value="Pressure">Pressure</option>
-                    <option value="Humidity">Humidty</option>
+                <select class="form-control input-sm inline normal-width pull-right" name="attribute" style="margin-top: -5px">
+                    <option value="-1" disabled selected>Choose attribute...</option>
+                    <option value="elevation">Elevation</option>
+                    <option value="speed">Speed</option>
+                    <option value="temp">Temperature</option>
+                    <option value="moist">Moist</option>
+                    <option value="pressure">Pressure</option>
+                    <option value="humidity">Humidty</option>
                     <option value="ADC0">ADC0</option>
                     <option value="ADC1">ADC1</option>
                     <option value="ADC2">ADC2</option>
@@ -92,8 +85,8 @@
                     <option value="SDSP1">SDSP1 (PM10)</option>
                     <option value="SDSP2">SDSP2 (PM2.5)</option>
                 </select>
-                <select class="form-control input-sm inline normal-width pull-right" name="" style="margin-top: -5px">
-                    <option value="" disabled selected>Choose sensor...</option>
+                <select class="form-control input-sm inline normal-width pull-right" name="sensor" style="margin-top: -5px">
+                    <option value="-1" disabled selected>Choose sensor...</option>
                     {% for sensor in sensors %}
                         <option value="{{ sensor.id }}">#{{ sensor.id }} {{ sensor.name }}</option>
                     {% endfor %}

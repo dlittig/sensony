@@ -28,5 +28,5 @@ Pressure: Pressure
 Dashboard: Dashboard
 Request: Request
 Humidity: Humidity
-'S d s p1': SDSP1
-'S d s p2': SDSP2
+'S d s p1': 'SDSP1 (PM10)'
+'S d s p2': 'SDSP2 (PM2.5)'

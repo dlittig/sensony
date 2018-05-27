@@ -35,31 +35,4 @@ class DefaultController extends Controller {
             return $this->redirectToRoute('admin');
         }
     }
-
-    /**
-     * @Security("has_role('ROLE_ADMIN')")
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function statusAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
-        $result = $em->getRepository('AppBundle:Data')->getSensorStatus();
-
-        $response = [];
-
-        foreach($result as $item) {
-            // Compare date
-            $limitTime = date_modify(new DateTime('now'), '-1 hour')->format('H:i');
-            $limitDate = date_modify(new DateTime('now'), '-1 hour')->format('d.m.Y');
-
-            $response[] = [
-                'id'   => $item['id'],
-                'name' => $item['name'],
-                'uuid' => $item['uuid'],
-                'up'   => $item['date']->format('d.m.Y') >= $limitDate && $item['time']->format('H:i') >= $limitTime
-            ];
-        }
-
-        return new JsonResponse($response);
-    }
 }

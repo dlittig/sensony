@@ -1,6 +1,7 @@
 <?php
 
 namespace AppBundle\Repository;
+use AppBundle\Entity\Sensor;
 
 /**
  * DataRepository
@@ -18,12 +19,15 @@ class DataRepository extends \Doctrine\ORM\EntityRepository {
 
     /**
      * @param array $items
+     * @param $sensorId
      * @param $max
      * @return array
      */
-    public function getRecent(array $items, $max) {
+    public function getRecentForSensor(array $items, $sensorId, $max) {
         $query = $this->createQueryBuilder('data')
-            ->select()
+            ->select('data')
+            ->where('data.sensor = :id')
+            ->setParameter('id', $sensorId)
             ->setMaxResults($max)
             ->orderBy('data.id', 'DESC');
 
