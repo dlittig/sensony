@@ -210,7 +210,7 @@ class AdminController extends BaseAdminController {
 
         $response = [];
 
-        foreach($result as $element) {
+        foreach(array_reverse($result) as $element) {
             $response[] = [
                 'id'   => $element->getId(),
                 'date' => $element->getDate(),
