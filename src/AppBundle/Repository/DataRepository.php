@@ -29,7 +29,7 @@ class DataRepository extends \Doctrine\ORM\EntityRepository {
             ->where('data.sensor = :id')
             ->setParameter('id', $sensorId)
             ->setMaxResults($max)
-            ->orderBy('data.id', 'DESC');
+            ->orderBy('data.id', 'ASC');
 
         foreach($items as $item) {
             $query->andWhere('data.'. $item .' IS NOT NULL');
