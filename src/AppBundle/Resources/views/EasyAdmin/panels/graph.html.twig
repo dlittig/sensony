@@ -10,18 +10,19 @@
         grey: 'rgb(201, 203, 207)'
     }
 
-    let configuration = {
+    const configuration = {
         type: 'line',
         data: {
             datasets: [{
-                label: 'Pressure in mb',
+                label: '',
                 data: [],
                 backgroundColor: window.chartColors.blue,
                 borderColor: window.chartColors.blue,
                 borderWidth: 1,
-                fill: false,
+                fill: true,
                 yAxisID: 'axis'
-            }]
+            }],
+            labels: []
         },
         options: {
             scales: {
@@ -43,6 +44,7 @@
         $('[name="attribute"], [name="sensor"]').on('change', function() {
             const attribute = $('[name="attribute"]').val()
             const sensor = $('[name="sensor"]').val()
+
             if(attribute !== null && sensor !== null) {
                 $.ajax({
                     url: '{{ url('graphData') }}',
@@ -52,20 +54,35 @@
                         sensor: sensor
                     }
                 }).then(function (response) {
-                    configuration.data.datasets[0].data = response
                     configuration.data.datasets[0].label = attribute + ' of sensor ' + sensor
-                    chart = new Chart(ctx, configuration)
+                    configuration.data.datasets[0].data = []
+                    configuration.data.labels = []
+
+                    response.forEach(function(element, index) {
+                        configuration.data.datasets[0].data.push(element.value)
+                        configuration.data.labels.push(formatDateTime(new Date(element.date.date), new Date(element.time.date), '-'))
+                    })
+
+                    chart = new Chart(ctx, Object.assign({}, configuration))
                 })
             }
         })
     })
+
+    function formatDateTime(date, time, separator) {
+        console.log(date, time)
+
+        return  date.getUTCDate() + '.' + date.getUTCMonth() + '.' + date.getUTCFullYear() + ' ' +
+                separator + ' ' +
+                time.getUTCHours() + ':' + time.getUTCMinutes() + ':' + time.getUTCSeconds()
+    }
 </script>
 
 <div class="col-xs-12 col-md-9">
     <div>
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title inline">Historie</h3>
+                <h3 class="panel-title inline">History</h3>
                 <select class="form-control input-sm inline normal-width pull-right" name="attribute" style="margin-top: -5px">
                     <option value="-1" disabled selected>Choose attribute...</option>
                     <option value="elevation">Elevation</option>
@@ -73,7 +90,7 @@
                     <option value="temp">Temperature</option>
                     <option value="moist">Moist</option>
                     <option value="pressure">Pressure</option>
-                    <option value="humidity">Humidty</option>
+                    <option value="humidity">Humidity</option>
                     <option value="ADC0">ADC0</option>
                     <option value="ADC1">ADC1</option>
                     <option value="ADC2">ADC2</option>
@@ -92,8 +109,8 @@
                     {% endfor %}
                 </select>
             </div>
-            <div class="panel-body">
-                <canvas id = "canvas"></canvas>
+            <div class="panel-body canvas-wrapper">
+                <canvas id="canvas"></canvas>
             </div>
         </div>
     </div>

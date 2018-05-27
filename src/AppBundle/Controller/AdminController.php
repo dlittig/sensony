@@ -211,15 +211,12 @@ class AdminController extends BaseAdminController {
         $response = [];
 
         foreach($result as $element) {
-            $response[] = $element->{'get' . ucfirst($request->request->get('attribute'))}();
-            /*
-            [
+            $response[] = [
                 'id'   => $element->getId(),
                 'date' => $element->getDate(),
                 'time' => $element->getTime(),
-                $request->request->get('attribute') => $element->{'get' . ucfirst($request->request->get('attribute'))}()
+                'value' => $element->{'get' . ucfirst($request->request->get('attribute'))}()
             ];
-            */
         }
 
         return new JsonResponse($response);
