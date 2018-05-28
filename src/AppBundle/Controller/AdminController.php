@@ -181,8 +181,8 @@ class AdminController extends BaseAdminController {
 
         foreach($result as $item) {
             // Compare date
-            $limitTime = date_modify(new DateTime('now'), '-1 hour')->format('H:i');
-            $limitDate = date_modify(new DateTime('now'), '-1 hour')->format('d.m.Y');
+            $limitTime = date_modify(new DateTime('now', new \DateTimeZone('UTC')), '-1 hour')->format('H:i');
+            $limitDate = date_modify(new DateTime('now', new \DateTimeZone('UTC')), '-1 hour')->format('d.m.Y');
 
             $response[] = [
                 'id'   => $item['id'],
