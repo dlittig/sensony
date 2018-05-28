@@ -70,7 +70,7 @@ easy_admin:
     site_name: 'Sensony'
     formats:
         date: 'd.m.Y'
-        time: 'H:i'
+        time: 'H:i:s'
         datetime: 'd.m.Y H:i'
     design:
         color_scheme: 'dark'
