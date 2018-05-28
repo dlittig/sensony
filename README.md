@@ -112,6 +112,16 @@ Same procedure is being used for temperature. Also the value of `xyz` is being f
 this way you can spread the values to different attributes. If you don't specify a mapping, the tool searches for the default 
 attribute keys as stated in the table above. 
 
+## Configuring the sensor
+When configuring the API in the sensor make sure that other APIs (i.e. luftdaten.info and madavi.de) are disabled. Then enter the following data when configuring:
+
+```
+URL:      <host>/api/v1/data
+Port:     <80>/<443> # depends on protocol
+Username: <UUID of sensor>
+Password: <Token of sensor>
+``` 
+
 ## Development
 During development the database schema can change. 
 To update it without losing all the data you can use the configuration script once more!

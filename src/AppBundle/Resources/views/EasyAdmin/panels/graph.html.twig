@@ -39,8 +39,6 @@
     let chart = null
 
     $(document).ready(function() {
-        const ctx = document.getElementById("canvas").getContext('2d')
-
         $('[name="attribute"], [name="sensor"]').on('change', function() {
             const attribute = $('[name="attribute"]').val()
             const sensor = $('[name="sensor"]').val()
@@ -63,6 +61,11 @@
                         configuration.data.labels.push(formatDateTime(new Date(element.date.date), new Date(element.time.date), '-'))
                     })
 
+                    const wrapper = $('.canvas-wrapper')
+                    $(wrapper).html('')
+                    $(wrapper).html('<canvas id="canvas"></canvas>')
+
+                    const ctx = document.getElementById("canvas").getContext('2d')
                     chart = new Chart(ctx, Object.assign({}, configuration))
                 })
             }
