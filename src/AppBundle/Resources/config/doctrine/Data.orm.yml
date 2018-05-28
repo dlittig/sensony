@@ -74,9 +74,9 @@ AppBundle\Entity\Data:
         ADC7:
             type: float
             nullable: true
-        SDS_P1:
+        SDSP1:
             type: float
             nullable: true
-        SDS_P2:
+        SDSP2:
             type: float
             nullable: true

@@ -65,12 +65,12 @@ class Data
     /**
      * @var float
      */
-    private $SDS_P1;
+    private $SDSP1;
 
     /**
      * @var float
      */
-    private $SDS_P2;
+    private $SDSP2;
 
     /**
      * @var float
@@ -593,7 +593,7 @@ class Data
      */
     public function setSDSP1($sDSP1)
     {
-        $this->SDS_P1 = $sDSP1;
+        $this->SDSP1 = $sDSP1;
 
         return $this;
     }
@@ -605,7 +605,7 @@ class Data
      */
     public function getSDSP1()
     {
-        return $this->SDS_P1;
+        return $this->SDSP1;
     }
 
     /**
@@ -617,7 +617,7 @@ class Data
      */
     public function setSDSP2($sDSP2)
     {
-        $this->SDS_P2 = $sDSP2;
+        $this->SDSP2 = $sDSP2;
 
         return $this;
     }
@@ -629,6 +629,6 @@ class Data
      */
     public function getSDSP2()
     {
-        return $this->SDS_P2;
+        return $this->SDSP2;
     }
 }
