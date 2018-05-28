@@ -46,6 +46,9 @@ doctrine:
         driver: pdo_sqlite
         path: '%kernel.project_dir%/var/app.db'
         charset: UTF8
+        types:
+            datetime: AppBundle\Doctrine\DBAL\Types\UTCDateTimeType
+            datetimetz: AppBundle\Doctrine\DBAL\Types\UTCDateTimeType
 
     orm:
         auto_generate_proxy_classes: '%kernel.debug%'
@@ -110,4 +113,4 @@ easy_admin:
         Data:
             class: AppBundle\Entity\Data
             list:
-                fields: ['id', 'time', 'date', 'temp', 'pressure', 'elevation']
+                fields: ['id', 'time', 'date', 'temp', 'pressure', 'sensor']
