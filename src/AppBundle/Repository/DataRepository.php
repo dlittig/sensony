@@ -68,7 +68,7 @@ class DataRepository extends \Doctrine\ORM\EntityRepository {
             ->addSelect('sensor.id, sensor.name, sensor.uuid, data.date, data.time')
             ->where('data.date IS NOT NULL')
             ->andWhere('data.time IS NOT NULL')
-            ->orderBy('sensor.name', 'ASC')
+            ->orderBy('sensor.id', 'ASC')
             ->groupBy('sensor.id')
             ->getQuery()
             ->getResult();

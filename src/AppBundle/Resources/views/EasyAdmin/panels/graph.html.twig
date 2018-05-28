@@ -70,7 +70,7 @@
     })
 
     function formatDateTime(date, time, separator) {
-        return  date.getUTCDate() + '.' + (date.getUTCMonth()+1) + '.' + date.getUTCFullYear() + ' ' +
+        return  (date.getUTCDate()+1) + '.' + (date.getUTCMonth()+1) + '.' + date.getUTCFullYear() + ' ' +
                 separator + ' ' +
                 time.getUTCHours() + ':' + time.getUTCMinutes() + ':' + time.getUTCSeconds()
     }
