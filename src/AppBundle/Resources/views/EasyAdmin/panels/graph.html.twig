@@ -73,9 +73,13 @@
     })
 
     function formatDateTime(date, time, separator) {
-        return  (date.getUTCDate()+1) + '.' + (date.getUTCMonth()+1) + '.' + date.getUTCFullYear() + ' ' +
+        return  getFormatted(date.getDate()) + '.' + getFormatted(date.getMonth()+1) + '.' + getFormatted(date.getFullYear()) + ' ' +
                 separator + ' ' +
-                time.getUTCHours() + ':' + time.getUTCMinutes() + ':' + time.getUTCSeconds()
+                getFormatted(time.getHours()) + ':' + getFormatted(time.getMinutes()) + ':' + getFormatted(time.getSeconds())
+    }
+
+    function getFormatted(number) {
+        return (number < 10) ? '0'+number : number
     }
 </script>
 

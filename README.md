@@ -4,8 +4,17 @@ Sensony is a simple tool with which you can manage sensor data. Data can be temp
 Sensony includes a simple REST API that receives updates from sensors and saves them to the database.
 
 ## Requirements
-To be able to run this project you have to have PHP 5.5.9 installed. 
+To be able to run this project you have to have PHP 5.5.9, Apache2 and Git installed. 
 Other tools are not required. The database used here is a file-based SQLite database.
+
+If you are starting with an OS that has nothing of those tools installed, install them with the first command. Then activate the apache rewrite module.
+```
+sudo apt install php git php7.0-gd php7.0-intl php7.0-xsl php7.0-sqlite3 php7.0-mbstring
+
+sudo a2enmod mod_rewrite
+```
+
+After this, follow the virtual host setup from the [Symfony Docs][4]. Make sure to use the **optimized configuration**.
 
 ## Installation
 First of all download the project from GitHub and place it into a folder of your choice. 
@@ -144,3 +153,4 @@ Enjoy!
 [1]: https://github.com/symfony/symfony
 [2]: https://github.com/EasyCorp/EasyAdminBundle
 [3]: https://github.com/composer/composer
+[4]: https://symfony.com/doc/3.4/setup/web_server_configuration.html
