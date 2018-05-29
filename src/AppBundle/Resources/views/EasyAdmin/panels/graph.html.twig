@@ -52,7 +52,7 @@
                         sensor: sensor
                     }
                 }).then(function (response) {
-                    configuration.data.datasets[0].label = attribute + ' of sensor ' + sensor
+                    configuration.data.datasets[0].label = attribute + ' of sensor ' + $('select[name="sensor"] option[value="' + sensor + '"]').text()
                     configuration.data.datasets[0].data = []
                     configuration.data.labels = []
 
