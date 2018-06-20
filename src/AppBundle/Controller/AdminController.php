@@ -125,7 +125,7 @@ class AdminController extends BaseAdminController {
     }
 
     private function csvRow($request, $item, $sensors) {
-        $row = [$item->getDate()->format('d.m.Y'), $item->getTime()->format('H:i')];
+        $row = [$item->getDate()->format('d.m.Y'), $item->getTime()->format('H:i:s')];
         foreach($sensors as $sensor) {
             if($sensor->getId() === $item->getSensor()->getId()) {
                 // Insert empty field for sensor name
@@ -150,7 +150,9 @@ class AdminController extends BaseAdminController {
     private function getSensorsFromData($data) {
         $result = [];
         foreach($data as $item) {
-            $result[$item->getId()] = $item->getSensor();
+            if(!array_key_exists($item->getSensor()->getId(), $result)) {
+                $result[$item->getSensor()->getId()] = $item->getSensor();
+            }
         }
 
         return $result;
