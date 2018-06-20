@@ -84,34 +84,20 @@ class AdminController extends BaseAdminController {
             $start = new \DateTime($request->request->get('startDate'));
             $end = new \DateTime($request->request->get('endDate'));
             $data = $em->getRepository('AppBundle:Data')->getLimited($start, $end);
+            $sensors = $this->getSensorsFromData($data);
 
             // Add the header of the CSV file
             fputcsv(
                 $handle,
-                array_values($request->request->get('properties')),
+                $this->csvHeader(array_values($request->request->get('properties')), $sensors),
                 ';'
             );
 
             // Add the data queried from database
             foreach($data as $item) {
-                $row = [];
-                foreach($request->request->get('properties') as $key => $value) {
-                    if($value === 'Sensor') {
-                        $row[] = ($item->getSensor() != null) ? $item->getSensor()->__toString() : 'No sensor assigned.';
-                    } else if($value === 'Time') {
-                        if($item->{'get'.$value}()) {
-                            $row[] = $item->{'get' . $value}()->format('H:i');
-                        } else $row[] = null;
-                    } else if($value === 'Date') {
-                        if($item->{'get'.$value}()) {
-                            $row[] = $item->{'get' . $value}()->format('d.m.Y');
-                        } else $row[] = null;
-                    } else $row[] = $item->{'get'.$value}(); // Use the getter by the passed form data string
-                }
-
                 fputcsv(
                     $handle, // The file pointer
-                    $row,
+                    $this->csvRow($request, $item, $sensors),
                     ';' // The delimiter
                 );
             }
@@ -124,6 +110,50 @@ class AdminController extends BaseAdminController {
         $response->headers->set('Content-Disposition', 'attachment; filename="export.csv"');
 
         return $response;
+    }
+
+    private function csvHeader($properties, $sensors) {
+        $result = ['Date', 'Time'];
+
+        foreach($sensors as $sensor) {
+            $result[] = $sensor->getName();
+            foreach($properties as $property)
+                $result[] = $property;
+        }
+
+        return $result;
+    }
+
+    private function csvRow($request, $item, $sensors) {
+        $row = [$item->getDate()->format('d.m.Y'), $item->getTime()->format('H:i')];
+        foreach($sensors as $sensor) {
+            if($sensor->getId() === $item->getSensor()->getId()) {
+                // Insert empty field for sensor name
+                $row[] = '';
+                foreach($request->request->get('properties') as $key => $value) {
+                    if($value === 'Sensor') {
+                        $row[] = ($item->getSensor() != null) ? $item->getSensor()->__toString() : 'No sensor assigned.';
+                    } else $row[] = $item->{'get'.$value}(); // Use the getter by the passed form data string
+                }
+            } else {
+                // Insert empty item for the sensor name
+                $row[] = '';
+                foreach($request->request->get('properties') as $key => $value) {
+                    $row[] = '';
+                }
+            }
+        }
+
+        return $row;
+    }
+
+    private function getSensorsFromData($data) {
+        $result = [];
+        foreach($data as $item) {
+            $result[$item->getId()] = $item->getSensor();
+        }
+
+        return $result;
     }
 
     /**
