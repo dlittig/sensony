@@ -220,7 +220,9 @@ class AdminController extends BaseAdminController {
                 'id'   => $item['id'],
                 'name' => $item['name'],
                 'uuid' => $item['uuid'],
-                'up'   => $item['date']->format('d.m.Y') >= $limitDate && $item['time']->format('H:i') >= $limitTime
+                'up'   => strtotime($item['date']->format('d.m.Y')) >= strtotime($limitDate)
+                            &&
+                            strtotime($item['time']->format('H:i')) >= strtotime($limitTime)
             ];
         }
 
