@@ -289,9 +289,16 @@ class AdminController extends BaseAdminController {
      */
 
     protected function createDataListQueryBuilder($entityClass, $sortDirection, $sortField = null, $dqlFilter = null) {
-        $dqlFilter = $this->getFilter();
+        $dqlFilter = $this->getFilter($dqlFilter);
 
         return parent::createListQueryBuilder($entityClass, $sortDirection, $sortField, $dqlFilter);
+    }
+
+
+    protected function createDataSearchQueryBuilder($entityClass, $searchQuery, array $searchableFields, $sortField = null, $sortDirection = null, $dqlFilter = null) {
+        $dqlFilter = $this->getFilter($dqlFilter);
+
+        return parent::createSearchQueryBuilder($entityClass, $searchQuery, $searchableFields, $sortField, $sortDirection, $dqlFilter);
     }
 
     /**
@@ -299,11 +306,17 @@ class AdminController extends BaseAdminController {
      * @param $dqlFilter
      * @return null|string
      */
-    private function getFilter() {
+    private function getFilter($dqlFilter) {
+        dump($dqlFilter);
         if($this->user->getRole() === 'ROLE_USER') {
             $sensors = $this->user->getSensors();
 
             $filter = '';
+
+            // If dql filter already exists, then take it as a basis.
+            if($dqlFilter !== null && $dqlFilter !== '') {
+                $filter = $dqlFilter . ' WHERE ';
+            }
 
             // For each sensor add condition
             foreach($sensors as $index => $sensor) {
@@ -315,6 +328,7 @@ class AdminController extends BaseAdminController {
                 }
             }
 
+            $this->logger->debug($dqlFilter);
             return $filter;
         } else return null;
     }
