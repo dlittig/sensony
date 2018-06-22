@@ -7,6 +7,14 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class User implements UserInterface {
 
     /**
+     * Constructor
+     */
+    public function __construct() {
+        $this->sensors = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->roles = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
      * Returns the roles granted to the user.
      *
      * <code>
@@ -23,7 +31,11 @@ class User implements UserInterface {
      * @return array (Role|string)[] The user roles
      */
     public function getRoles() {
-        return [$this->role];
+        $r = [];
+        foreach ($this->roles->toArray() as $item) {
+            $r[] = $item->getName();
+        }
+        return $r;
     }
 
     /**
@@ -86,10 +98,19 @@ class User implements UserInterface {
     private $password;
 
     /**
-     * @var string
+     * @var \Doctrine\Common\Collections\Collection
      */
-    private $role;
+    private $roles;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $sensors;
+
+    /**
+     * @var integer
+     */
+    private $timeToLive;
 
     /**
      * Get id
@@ -154,35 +175,6 @@ class User implements UserInterface {
     }
 
     /**
-     * Set role
-     *
-     * @param string $role
-     *
-     * @return User
-     */
-    public function setRole($role)
-    {
-        $this->role = $role;
-
-        return $this;
-    }
-
-    /**
-     * Get role
-     *
-     * @return string
-     */
-    public function getRole()
-    {
-        return $this->role;
-    }
-    /**
-     * @var integer
-     */
-    private $timeToLive;
-
-
-    /**
      * Set timeToLive
      *
      * @param integer $timeToLive
@@ -205,27 +197,15 @@ class User implements UserInterface {
     {
         return $this->timeToLive;
     }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $sensors;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->sensors = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Add sensor
      *
-     * @param \AppBundle\Entity\Sensor $sensor
+     * @param Sensor $sensor
      *
      * @return User
      */
-    public function addSensor(\AppBundle\Entity\Sensor $sensor)
+    public function addSensor(Sensor $sensor)
     {
         $this->sensors[] = $sensor;
 
@@ -235,9 +215,9 @@ class User implements UserInterface {
     /**
      * Remove sensor
      *
-     * @param \AppBundle\Entity\Sensor $sensor
+     * @param Sensor $sensor
      */
-    public function removeSensor(\AppBundle\Entity\Sensor $sensor)
+    public function removeSensor(Sensor $sensor)
     {
         $this->sensors->removeElement($sensor);
     }
@@ -250,5 +230,29 @@ class User implements UserInterface {
     public function getSensors()
     {
         return $this->sensors;
+    }
+
+    /**
+     * Add role
+     *
+     * @param Role $role
+     *
+     * @return User
+     */
+    public function addRole(Role $role)
+    {
+        $this->roles[] = $role;
+
+        return $this;
+    }
+
+    /**
+     * Remove role
+     *
+     * @param Role $role
+     */
+    public function removeRole(Role $role)
+    {
+        $this->roles->removeElement($role);
     }
 }

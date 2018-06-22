@@ -21,7 +21,7 @@ class UserFixtures extends Fixture {
         $user->setUsername('admin');
         $user->setMail('admin@localhost');
         $user->setPassword($this->encoder->encodePassword($user, 'admin'));
-        $user->setRole('ROLE_ADMIN');
+        $user->addRole($this->getReference('admin-role'));
 
         $manager->persist($user);
 
@@ -30,10 +30,16 @@ class UserFixtures extends Fixture {
         $user->setUsername('user');
         $user->setMail('user@localhost');
         $user->setPassword($this->encoder->encodePassword($user, 'user'));
-        $user->setRole('ROLE_USER');
+        $user->addRole($this->getReference('user-role'));
 
         $manager->persist($user);
 
         $manager->flush();
+    }
+
+    public function getDependencies() {
+        return array(
+            RoleFixtures::class,
+        );
     }
 }

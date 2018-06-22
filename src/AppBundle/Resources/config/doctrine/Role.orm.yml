@@ -1,0 +1,18 @@
+AppBundle\Entity\Role:
+    type: entity
+    table: role
+
+    id:
+        id:
+            type: integer
+            nullable: false
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+            nullable: false
+        friendlyName:
+            type: string
+            nullable: false

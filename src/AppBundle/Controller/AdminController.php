@@ -3,9 +3,8 @@
 namespace AppBundle\Controller;
 
 // Annotations
+use AppBundle\Entity\User;
 use DateTime;
-use EasyCorp\Bundle\EasyAdminBundle\Event\EasyAdminEvents;
-use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
@@ -18,15 +17,20 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
+use AppBundle\Globals\Utils;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+
 class AdminController extends BaseAdminController {
 
     private $userEntities = ['Data' => ['list', 'show', 'search']];
     private $user = null;
-    private $logger;
+    private $tokenStorage;
+    private $authChecker;
 
-    public function __construct(TokenStorageInterface $tokenStorage, LoggerInterface $loggerInterface) {
+    public function __construct(TokenStorageInterface $tokenStorage, AuthorizationCheckerInterface $authChecker) {
         $this->user = $tokenStorage->getToken()->getUser();
-        $this->logger = $loggerInterface;
+        $this->tokenStorage = $tokenStorage;
+        $this->authChecker = $authChecker;
     }
 
     /**
@@ -306,7 +310,7 @@ class AdminController extends BaseAdminController {
      * @return null|string
      */
     private function getFilter() {
-        if($this->user->getRole() === 'ROLE_USER') {
+        if($this->authChecker->isGranted('ROLE_USER')) {
             $sensors = $this->user->getSensors();
 
             $filter = '';
@@ -332,6 +336,27 @@ class AdminController extends BaseAdminController {
     /*
      * User functions
      */
+
+    protected function createNewUserEntity() {
+        // Generate password here
+        $user = new User();
+        $un = Utils::generateUsername();
+        $user->setMail($un);
+        $user->setUsername($un);
+
+        $user->setPassword(Utils::generateRandomString(12));
+
+        return $user;
+    }
+
+    protected function persistUser($entity) {
+        $this->em->persist($entity);
+        $this->em->flush();
+    }
+
+    protected function updateUser($entity) {
+        $this->em->flush();
+    }
 
     /*
      * End user functions

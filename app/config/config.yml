@@ -118,6 +118,6 @@ easy_admin:
         User:
             class: AppBundle\Entity\User
             show:
-                fields: ['username', 'mail', 'timeToLive', 'role', 'sensors']
+                fields: ['username', 'mail', 'timeToLive', 'roles', 'sensors']
             list:
-                fields: ['id', 'username', 'mail', 'role']
+                fields: ['id', 'username', 'mail', 'roles']

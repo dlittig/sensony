@@ -23,9 +23,6 @@ AppBundle\Entity\User:
         timeToLive:
             type: integer
             nullable: true
-        role:
-            type: string
-            nullable: false
 
     manyToMany:
         sensors:
@@ -37,4 +34,14 @@ AppBundle\Entity\User:
                         referencedColumnName: id
                 inverseJoinColumns:
                     sensor_id:
+                        referencedColumnName: id
+        roles:
+            targetEntity: Role
+            joinTable:
+                name: user_roles
+                joinColumns:
+                    user_id:
+                        referencedColumnName: id
+                inversedJoinColumn:
+                    role_id:
                         referencedColumnName: id
