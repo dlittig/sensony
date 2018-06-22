@@ -349,14 +349,23 @@ class AdminController extends BaseAdminController {
         return $user;
     }
 
-    protected function persistUser($entity) {
+    protected function persistUserEntity($entity) {
+        // TODO: Hash password
         $this->em->persist($entity);
         $this->em->flush();
     }
 
-    protected function updateUser($entity) {
+    protected function updateUserEntity($entity) {
+        // TODO: Check if password is new, then safe
         $this->em->flush();
     }
+
+    /*
+    protected function createUserEditForm($entity, $fields) {
+        // TODO: Mask password and preselect role
+        return false;
+    }
+    */
 
     /*
      * End user functions
