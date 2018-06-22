@@ -294,7 +294,7 @@ class AdminController extends BaseAdminController {
                 if($index === 0) {
                     $filter .= 'entity.sensor = '.$sensor->getId();
                 } else {
-                    $filter .= 'AND entity.sensor = '.$sensor->getId();
+                    $filter .= 'OR entity.sensor = '.$sensor->getId();
                 }
             }
 
