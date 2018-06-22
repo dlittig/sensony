@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 // Annotations
 use DateTime;
+use EasyCorp\Bundle\EasyAdminBundle\Event\EasyAdminEvents;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -286,23 +287,46 @@ class AdminController extends BaseAdminController {
      */
 
     protected function createDataListQueryBuilder($entityClass, $sortDirection, $sortField = null, $dqlFilter = null) {
+        $dqlFilter = $this->getFilter($dqlFilter);
+
+        return parent::createListQueryBuilder($entityClass, $sortDirection, $sortField, $dqlFilter);
+    }
+
+    protected function createDataSearchQueryBuilder($entityClass, $sortDirection, $sortField = null, $dqlFilter = null) {
+        $dqlFilter = $this->getFilter($dqlFilter);
+
+        return parent::createSearchQueryBuilder($entityClass, $sortDirection, $sortField, $dqlFilter);
+    }
+
+    /**
+     * Gets filter and apends it to the existing dql filter
+     * @param $dqlFilter
+     * @return null|string
+     */
+    private function getFilter($dqlFilter) {
         if($this->user->getRole() === 'ROLE_USER') {
             $sensors = $this->user->getSensors();
 
             $filter = '';
+
+            // If dql filter already exists, then take it as a basis.
+            if($dqlFilter !== null && $dqlFilter !== '') {
+                $filter = $dqlFilter;
+            }
+
+            // For each sensor add condition
             foreach($sensors as $index => $sensor) {
-                if($index === 0) {
+                // Start with the fresh condition only if first index and dqlFilter was empty.
+                if($index === 0 && ($dqlFilter === null && $dqlFilter === '')) {
                     $filter .= 'entity.sensor = '.$sensor->getId();
                 } else {
-                    $filter .= 'OR entity.sensor = '.$sensor->getId();
+                    $filter .= ' OR entity.sensor = '.$sensor->getId();
                 }
             }
 
-            $dqlFilter = $filter;
+            return $filter;
             //dump($dqlFilter);
-        }
-
-        return parent::createListQueryBuilder($entityClass, $sortDirection, $sortField, $dqlFilter);
+        } else return null;
     }
 
     protected function listDataAction() {
