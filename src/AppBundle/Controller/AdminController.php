@@ -289,44 +289,32 @@ class AdminController extends BaseAdminController {
      */
 
     protected function createDataListQueryBuilder($entityClass, $sortDirection, $sortField = null, $dqlFilter = null) {
-        $dqlFilter = $this->getFilter($dqlFilter);
+        $dqlFilter = $this->getFilter();
 
         return parent::createListQueryBuilder($entityClass, $sortDirection, $sortField, $dqlFilter);
     }
 
-    protected function createDataSearchQueryBuilder($entityClass, $sortDirection, $sortField = null, $dqlFilter = null) {
-        $dqlFilter = $this->getFilter($dqlFilter);
-
-        return parent::createSearchQueryBuilder($entityClass, $sortDirection, $sortField, $dqlFilter);
-    }
-
     /**
-     * Gets filter and apends it to the existing dql filter
+     * Gets filter and appends it to the existing dql filter
      * @param $dqlFilter
      * @return null|string
      */
-    private function getFilter($dqlFilter) {
+    private function getFilter() {
         if($this->user->getRole() === 'ROLE_USER') {
             $sensors = $this->user->getSensors();
 
             $filter = '';
 
-            // If dql filter already exists, then take it as a basis.
-            if($dqlFilter !== null && $dqlFilter !== '') {
-                $filter = $dqlFilter;
-            }
-
             // For each sensor add condition
             foreach($sensors as $index => $sensor) {
                 // Start with the fresh condition only if first index and dqlFilter was empty.
-                if($index === 0 && ($dqlFilter === null || $dqlFilter === '')) {
+                if($index === 0) {
                     $filter .= 'entity.sensor = '.$sensor->getId();
                 } else {
                     $filter .= ' OR entity.sensor = '.$sensor->getId();
                 }
             }
 
-            $this->logger->debug($dqlFilter);
             return $filter;
         } else return null;
     }
