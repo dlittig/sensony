@@ -1,4 +1,5 @@
 Sensor: Sensor
+Sensors: Sensors
 SensorType: 'Sensor type'
 Data: Data
 ID: ID
@@ -29,6 +30,7 @@ Dashboard: Dashboard
 User: User
 Username: Username
 Role: Role
+Roles: Roles
 Mail: Mail
 Request: Request
 Humidity: Humidity
