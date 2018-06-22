@@ -22,9 +22,11 @@ class AdminController extends BaseAdminController {
 
     private $userEntities = ['Data' => ['list', 'show', 'search']];
     private $user = null;
+    private $logger;
 
-    public function __construct(TokenStorageInterface $tokenStorage) {
+    public function __construct(TokenStorageInterface $tokenStorage, LoggerInterface $loggerInterface) {
         $this->user = $tokenStorage->getToken()->getUser();
+        $this->logger = $loggerInterface;
     }
 
     /**
@@ -317,15 +319,15 @@ class AdminController extends BaseAdminController {
             // For each sensor add condition
             foreach($sensors as $index => $sensor) {
                 // Start with the fresh condition only if first index and dqlFilter was empty.
-                if($index === 0 && ($dqlFilter === null && $dqlFilter === '')) {
+                if($index === 0 && ($dqlFilter === null || $dqlFilter === '')) {
                     $filter .= 'entity.sensor = '.$sensor->getId();
                 } else {
                     $filter .= ' OR entity.sensor = '.$sensor->getId();
                 }
             }
 
+            $this->logger->debug($dqlFilter);
             return $filter;
-            //dump($dqlFilter);
         } else return null;
     }
 
