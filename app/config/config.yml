@@ -82,6 +82,7 @@ easy_admin:
             - { entity: 'Sensor', icon: 'thermometer-3' }
             - { entity: 'SensorType', icon: 'microchip' }
             - { entity: 'Data', icon: 'database' }
+            - { entity: 'User', icon: 'user' }
             - { label: 'Version: 0.0.%version%' }
         assets:
             css: ['/css/admin_dashboard.css', '/css/bootstrap-datetimepicker.min.css']
@@ -107,10 +108,16 @@ easy_admin:
                     - name
                     - description
                     - mapping
-                    - { property: 'request', css_class: 'request_json',type_options: { disabled: true } }
+                    - { property: 'request', css_class: 'request_json', type_options: { disabled: true } }
             edit:
                 fields: ['name', 'description', 'mapping', 'request']
         Data:
             class: AppBundle\Entity\Data
             list:
                 fields: ['id', 'time', 'date', 'temp', 'pressure', 'sensor']
+        User:
+            class: AppBundle\Entity\User
+            show:
+                fields: ['username', 'mail', 'timeToLive', 'role', 'sensors']
+            list:
+                fields: ['id', 'username', 'mail', 'role']

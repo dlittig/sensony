@@ -176,4 +176,79 @@ class User implements UserInterface {
     {
         return $this->role;
     }
+    /**
+     * @var integer
+     */
+    private $timeToLive;
+
+
+    /**
+     * Set timeToLive
+     *
+     * @param integer $timeToLive
+     *
+     * @return User
+     */
+    public function setTimeToLive($timeToLive)
+    {
+        $this->timeToLive = $timeToLive;
+
+        return $this;
+    }
+
+    /**
+     * Get timeToLive
+     *
+     * @return integer
+     */
+    public function getTimeToLive()
+    {
+        return $this->timeToLive;
+    }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $sensors;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->sensors = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add sensor
+     *
+     * @param \AppBundle\Entity\Sensor $sensor
+     *
+     * @return User
+     */
+    public function addSensor(\AppBundle\Entity\Sensor $sensor)
+    {
+        $this->sensors[] = $sensor;
+
+        return $this;
+    }
+
+    /**
+     * Remove sensor
+     *
+     * @param \AppBundle\Entity\Sensor $sensor
+     */
+    public function removeSensor(\AppBundle\Entity\Sensor $sensor)
+    {
+        $this->sensors->removeElement($sensor);
+    }
+
+    /**
+     * Get sensors
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSensors()
+    {
+        return $this->sensors;
+    }
 }

@@ -10,19 +10,26 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AdminController as BaseAdminController;
 use EasyCorp\Bundle\EasyAdminBundle\Exception\ForbiddenActionException;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class AdminController extends BaseAdminController {
+
+    private $userEntities = ['Data' => ['list', 'show', 'search']];
+    private $user = null;
+
+    public function __construct(TokenStorageInterface $tokenStorage) {
+        $this->user = $tokenStorage->getToken()->getUser();
+    }
 
     /**
      * @Route("/", name="admin")
      * @Route("/", name="easyadmin")
-     * @Security("has_role('ROLE_ADMIN')")
+     * @Security("has_role('ROLE_USER')")
      *
      * @param Request $request
      * @return RedirectResponse|Response
@@ -35,7 +42,7 @@ class AdminController extends BaseAdminController {
         }
 
         $action = $request->query->get('action', 'list');
-        if (!$this->isActionAllowed($action)) {
+        if (!$this->isActionAllowed($action) || !$this->userHasPermission($request->query->get('entity'), $action)) {
             throw new ForbiddenActionException(array('action' => $action, 'entity_name' => $this->entity['name']));
         }
 
@@ -43,8 +50,26 @@ class AdminController extends BaseAdminController {
     }
 
     /**
+     * Checks if user has permissions to proceed with action. Uses the $userEntities variable to determine.
+     * @param $entity
+     * @param $action
+     * @return bool Boolean: user has permissions to view resource
+     */
+    protected function userHasPermission($entity, $action) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
+            return true;
+        } else if($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
+            if(array_key_exists($entity, $this->userEntities) !== false) {
+                if(array_search($action, $this->userEntities[$entity]) !== false) {
+                    return true;
+                } else return false;
+            } else return false;
+        } else return false;
+    }
+
+    /**
      * @Route("/dashboard", name="admin_dashboard")
-     * @Security("has_role('ROLE_ADMIN')")
+     * @Security("has_role('ROLE_USER')")
      *
      * @param Request $request
      * @return Response
@@ -201,7 +226,7 @@ class AdminController extends BaseAdminController {
     }
 
     /**
-     * @Security("has_role('ROLE_ADMIN')")
+     * @Security("has_role('ROLE_USER')")
      * @param Request $request
      * @return JsonResponse
      */
@@ -230,7 +255,7 @@ class AdminController extends BaseAdminController {
     }
 
     /**
-     * @Security("has_role('ROLE_ADMIN')")
+     * @Security("has_role('ROLE_USER')")
      * @param Request $request
      * @return JsonResponse
      */
@@ -255,4 +280,45 @@ class AdminController extends BaseAdminController {
 
         return new JsonResponse($response);
     }
+
+    /*
+     * Data functions
+     */
+
+    protected function createDataListQueryBuilder($entityClass, $sortDirection, $sortField = null, $dqlFilter = null) {
+        if($this->user->getRole() === 'ROLE_USER') {
+            $sensors = $this->user->getSensors();
+
+            $filter = '';
+            foreach($sensors as $index => $sensor) {
+                if($index === 0) {
+                    $filter .= 'entity.sensor = '.$sensor->getId();
+                } else {
+                    $filter .= 'AND entity.sensor = '.$sensor->getId();
+                }
+            }
+
+            $dqlFilter = $filter;
+            //dump($dqlFilter);
+        }
+
+        return parent::createListQueryBuilder($entityClass, $sortDirection, $sortField, $dqlFilter);
+    }
+
+    protected function listDataAction() {
+        //dump('listData!');
+        return parent::listAction();
+    }
+
+    /*
+     * End data functions
+     */
+
+    /*
+     * User functions
+     */
+
+    /*
+     * End user functions
+     */
 }

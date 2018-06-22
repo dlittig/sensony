@@ -20,6 +20,21 @@ AppBundle\Entity\User:
         password:
             type: string
             nullable: false
+        timeToLive:
+            type: integer
+            nullable: true
         role:
             type: string
             nullable: false
+
+    manyToMany:
+        sensors:
+            targetEntity: Sensor
+            joinTable:
+                name: user_sensors
+                joinColumns:
+                    user_id:
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    sensor_id:
+                        referencedColumnName: id
