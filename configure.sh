@@ -28,7 +28,7 @@ do
 done
 
 if "$COMPOSER"; then
-    php composer.phar self-update
+    #php composer.phar self-update
     php composer.phar update --prefer-stable
 fi
 

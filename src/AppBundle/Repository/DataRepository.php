@@ -85,4 +85,17 @@ class DataRepository extends \Doctrine\ORM\EntityRepository {
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * @param array $sensors
+     * @return array
+     */
+    public function getDataForSensors(array $sensors) {
+        return $this->createQueryBuilder('data')
+            ->join('data.sensor', 'sensor')
+            ->where('sensor MEMBER OF :sensors')
+            ->setParameter('sensors', $sensors)
+            ->getQuery()
+            ->getResult();
+    }
 }

@@ -21,11 +21,18 @@ AppBundle\Entity\User:
             type: string
             nullable: false
         timeToLive:
-            type: integer
+            type: datetime
             nullable: true
+        created:
+            type: datetime
+            nullable: false
+            gedmo:
+                timestampable:
+                    on: create
 
     manyToMany:
         sensors:
+            inversedBy: users
             targetEntity: Sensor
             joinTable:
                 name: user_sensors
@@ -42,6 +49,6 @@ AppBundle\Entity\User:
                 joinColumns:
                     user_id:
                         referencedColumnName: id
-                inversedJoinColumn:
+                inverseJoinColumn:
                     role_id:
                         referencedColumnName: id

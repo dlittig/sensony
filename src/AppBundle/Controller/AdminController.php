@@ -16,9 +16,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-
 use AppBundle\Globals\Utils;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AdminController extends BaseAdminController {
 
@@ -26,11 +26,13 @@ class AdminController extends BaseAdminController {
     private $user = null;
     private $tokenStorage;
     private $authChecker;
+    private $passwordEncoder;
 
-    public function __construct(TokenStorageInterface $tokenStorage, AuthorizationCheckerInterface $authChecker) {
+    public function __construct(TokenStorageInterface $tokenStorage, AuthorizationCheckerInterface $authChecker, UserPasswordEncoderInterface $encoder) {
         $this->user = $tokenStorage->getToken()->getUser();
         $this->tokenStorage = $tokenStorage;
         $this->authChecker = $authChecker;
+        $this->passwordEncoder = $encoder;
     }
 
     /**
@@ -83,11 +85,18 @@ class AdminController extends BaseAdminController {
      */
     public function dashboardAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
         $dataCount = $em->getRepository('AppBundle:Data')->getDataCount();
         $recentTimestamp = $em->getRepository('AppBundle:Data')->getRecentDateTime();
-        $sensors = $em->getRepository('AppBundle:Sensor')->findAll();
-        $sensorTypes = $em->getRepository('AppBundle:SensorType')->findAll();
 
+        if($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
+            // Get all sensors associated with the user
+            $sensors = $em->getRepository('AppBundle:Sensor')->getSensorsForUser($user);
+        } else {
+            $sensors = $em->getRepository('AppBundle:Sensor')->findAll();
+        }
+
+        $sensorTypes = $em->getRepository('AppBundle:SensorType')->findAll();
         $recentTimestamp = (count($recentTimestamp) > 0) ? $recentTimestamp : null;
 
         return $this->render('AppBundle:EasyAdmin:dashboard.html.twig', [
@@ -325,6 +334,10 @@ class AdminController extends BaseAdminController {
                 }
             }
 
+            if(count($sensors) === 0) {
+                $filter = 'entity.sensor = -1';
+            }
+
             return $filter;
         } else return null;
     }
@@ -350,13 +363,22 @@ class AdminController extends BaseAdminController {
     }
 
     protected function persistUserEntity($entity) {
-        // TODO: Hash password
-        $this->em->persist($entity);
-        $this->em->flush();
-    }
+        $em = $this->getDoctrine()->getManager();
+        $pw = $entity->getPassword();
+        $shouldHash = false;
 
-    protected function updateUserEntity($entity) {
-        // TODO: Check if password is new, then safe
+        // Check if entity is old
+        if($entity->getId() !== null) {
+            $user = $em->getRepository('AppBundle:User')->find($entity->getId());
+            dump($entity->getPassword() , $user->getPassword());
+            if($entity->getPassword() !== $user->getPassword()) {
+                $shouldHash = true;
+            }
+        } else $shouldHash = true;
+
+        if($shouldHash === true) $entity->setPassword($this->passwordEncoder->encodePassword($entity, $pw));
+
+        $this->em->persist($entity);
         $this->em->flush();
     }
 

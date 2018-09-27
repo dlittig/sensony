@@ -31,11 +31,14 @@ class User implements UserInterface {
      * @return array (Role|string)[] The user roles
      */
     public function getRoles() {
+        /*
         $r = [];
         foreach ($this->roles->toArray() as $item) {
             $r[] = $item->getName();
         }
         return $r;
+        */
+        return $this->roles->toArray();
     }
 
     /**
@@ -254,5 +257,34 @@ class User implements UserInterface {
     public function removeRole(Role $role)
     {
         $this->roles->removeElement($role);
+    }
+    /**
+     * @var \DateTime
+     */
+    private $created;
+
+
+    /**
+     * Set created
+     *
+     * @param \DateTime $created
+     *
+     * @return User
+     */
+    public function setCreated($created)
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * Get created
+     *
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
     }
 }

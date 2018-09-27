@@ -43,3 +43,8 @@ AppBundle\Entity\Sensor:
             joinColumn:
                 name: sensortype_id
                 referencedColumnName: id
+
+    manyToMany:
+        users:
+            targetEntity: User
+            mappedBy: sensors

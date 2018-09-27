@@ -3,26 +3,32 @@
 namespace AppBundle\Globals;
 
 
+use Symfony\Component\Config\Definition\Exception\Exception;
+
 class Utils {
 
-    public static function generateRandomString($length = 10) {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ()?!=/%$.-_,#+[]';
+    const FULL_CHARSET = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ?!=/%$.-_,#+@';
+    const SMALL_CHARSET = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+    public static function generateRandomString($length = 10, $characters = self::FULL_CHARSET) {
         $charactersLength = strlen($characters);
         $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        try {
+            for ($i = 0; $i < $length; $i++) {
+                $randomString .= $characters[random_int(0, $charactersLength - 1)];
+            }
+        } catch(Exception $exception) {
+            $randomString = 'EE';
+            for ($i = 0; $i < $length; $i++) {
+                $randomString .= $characters[rand(0, $charactersLength - 1)];
+            }
         }
+
         return $randomString;
     }
 
     public static function generateUsername($length = 8) {
-        $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[rand(0, $charactersLength - 1)];
-        }
-        return $randomString;
+        return self::generateRandomString($length, self::SMALL_CHARSET);
     }
 
     public static function isValidMail($mail) {

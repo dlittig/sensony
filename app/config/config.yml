@@ -47,13 +47,19 @@ doctrine:
         path: '%kernel.project_dir%/var/app.db'
         charset: UTF8
         types:
-            datetime: AppBundle\Doctrine\DBAL\Types\UTCDateTimeType
-            datetimetz: AppBundle\Doctrine\DBAL\Types\UTCDateTimeType
+            utcdatetime:    Linkin\Component\DoctrineUTCDateTime\DBAL\Types\UtcDateTimeType
+            datetime:       Linkin\Component\DoctrineUTCDateTime\DBAL\Types\UtcDateTimeType
+            datetimetz:     AppBundle\Doctrine\DBAL\Types\UTCDateTimeType
 
     orm:
         auto_generate_proxy_classes: '%kernel.debug%'
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
+
+stof_doctrine_extensions:
+    orm:
+        default:
+            timestampable: true
 
 # Swiftmailer Configuration
 swiftmailer:
@@ -94,7 +100,7 @@ easy_admin:
         Sensor:
             class: AppBundle\Entity\Sensor
             list:
-                fields: ['id', 'name', 'uuid', 'data']
+                fields: ['id', 'name', 'uuid', 'sensorType']
             new:
                 fields: ['name', 'description', 'longitude', 'latitude', 'uuid', 'sensorType']
             edit:
@@ -117,7 +123,11 @@ easy_admin:
                 fields: ['id', 'time', 'date', 'temp', 'pressure', 'sensor']
         User:
             class: AppBundle\Entity\User
+            new:
+                fields: ['username', 'mail', 'sensors', 'password', 'timeToLive', 'roles']
             show:
                 fields: ['username', 'mail', 'timeToLive', 'roles', 'sensors']
             list:
-                fields: ['id', 'username', 'mail', 'roles']
+                fields: ['id', 'username', 'sensors', 'timeToLive']
+            edit:
+                fields: ['username', 'mail', 'sensors', 'password', 'timeToLive', 'roles' ]

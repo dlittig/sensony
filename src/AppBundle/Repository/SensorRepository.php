@@ -2,6 +2,8 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\User;
+
 /**
  * SensorRepository
  *
@@ -13,6 +15,14 @@ class SensorRepository extends \Doctrine\ORM\EntityRepository {
     public function getSensorCount() {
         return $this->createQueryBuilder('sensor')
             ->select('COUNT(sensor.id) as amount')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getSensorsForUser(User $user) {
+        return $this->createQueryBuilder('sensor')
+            ->innerJoin('sensor.users', 'u', 'WITH', 'u.id = :uid')
+            ->setParameter('uid', $user->getId())
             ->getQuery()
             ->getResult();
     }

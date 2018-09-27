@@ -9,6 +9,7 @@ class Sensor implements UserInterface {
 
     public function __construct() {
         $this->token = Utils::generateRandomString(32);
+        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function __toString() {
@@ -330,4 +331,43 @@ class Sensor implements UserInterface {
      * the plain-text password is stored on this object.
      */
     public function eraseCredentials() { }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $users;
+
+
+    /**
+     * Add user
+     *
+     * @param \AppBundle\Entity\User $user
+     *
+     * @return Sensor
+     */
+    public function addUser(\AppBundle\Entity\User $user)
+    {
+        $this->users[] = $user;
+
+        return $this;
+    }
+
+    /**
+     * Remove user
+     *
+     * @param \AppBundle\Entity\User $user
+     */
+    public function removeUser(\AppBundle\Entity\User $user)
+    {
+        $this->users->removeElement($user);
+    }
+
+    /**
+     * Get users
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUsers()
+    {
+        return $this->users;
+    }
 }
