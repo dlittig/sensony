@@ -251,33 +251,4 @@ class User implements UserInterface {
     {
         $this->roles->removeElement($role);
     }
-    /**
-     * @var \DateTime
-     */
-    private $created;
-
-
-    /**
-     * Set created
-     *
-     * @param \DateTime $created
-     *
-     * @return User
-     */
-    public function setCreated($created)
-    {
-        $this->created = $created;
-
-        return $this;
-    }
-
-    /**
-     * Get created
-     *
-     * @return \DateTime
-     */
-    public function getCreated()
-    {
-        return $this->created;
-    }
 }

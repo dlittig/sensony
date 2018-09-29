@@ -23,14 +23,6 @@ AppBundle\Entity\User:
         timeToLive:
             type: datetime
             nullable: true
-        created:
-            type: datetime
-            nullable: false
-            gedmo:
-                timestampable:
-                    on: create
-            options:
-                default: 0
 
     manyToMany:
         sensors:
