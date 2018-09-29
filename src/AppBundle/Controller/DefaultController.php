@@ -28,7 +28,7 @@ class DefaultController extends Controller {
 
         if($user instanceof  User) {
             if ($user->getTimeToLive() !== null) {
-                $expired = $user->getCreated() < new \DateTime('now');
+                $expired = $user->getTimeToLive() < new \DateTime('now');
             }
         }
 
