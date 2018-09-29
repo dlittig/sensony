@@ -31,13 +31,6 @@ class User implements UserInterface {
      * @return array (Role|string)[] The user roles
      */
     public function getRoles() {
-        /*
-        $r = [];
-        foreach ($this->roles->toArray() as $item) {
-            $r[] = $item->getName();
-        }
-        return $r;
-        */
         return $this->roles->toArray();
     }
 

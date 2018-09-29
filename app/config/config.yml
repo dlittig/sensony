@@ -92,7 +92,11 @@ easy_admin:
             - { label: 'Version: 0.0.%version%' }
         assets:
             css: ['/css/admin_dashboard.css', '/css/bootstrap-datetimepicker.min.css']
-            js: ['/js/admin_pretty_json.js', '/js/bootstrap-datetimepicker.min.js']
+            js:
+                - '/js/admin_pretty_json.js'
+                - '/js/bootstrap-datetimepicker.min.js'
+                - '/js/admin_print_credentials.js'
+                - '/js/admin_regenerate_credentials.js'
     list:
         actions: ['show', 'edit', 'search', 'delete', 'new']
     entities:
@@ -124,10 +128,22 @@ easy_admin:
         User:
             class: AppBundle\Entity\User
             new:
-                fields: ['username', 'mail', 'sensors', 'password', 'timeToLive', 'roles']
+                fields:
+                    - 'username'
+                    - 'mail'
+                    - { property: 'password', css_class: 'generated_password_new'}
+                    - 'sensors'
+                    - 'timeToLive'
+                    - 'roles'
             show:
                 fields: ['username', 'mail', 'timeToLive', 'roles', 'sensors']
             list:
                 fields: ['id', 'username', 'sensors', 'timeToLive']
             edit:
-                fields: ['username', 'mail', 'sensors', 'password', 'timeToLive', 'roles' ]
+                fields:
+                    - { property: 'username', css_class: 'generated_username_edit'}
+                    - 'mail'
+                    - { property: 'password', css_class: 'generated_password_edit'}
+                    - 'sensors'
+                    - 'timeToLive'
+                    - 'roles'
