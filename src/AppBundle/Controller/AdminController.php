@@ -370,7 +370,6 @@ class AdminController extends BaseAdminController {
         // Check if entity is old
         if($entity->getId() !== null) {
             $user = $em->getRepository('AppBundle:User')->find($entity->getId());
-            dump($entity->getPassword() , $user->getPassword());
             if($entity->getPassword() !== $user->getPassword()) {
                 $shouldHash = true;
             }
