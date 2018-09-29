@@ -29,6 +29,8 @@ AppBundle\Entity\User:
             gedmo:
                 timestampable:
                     on: create
+            options:
+                default: 0
 
     manyToMany:
         sensors:
