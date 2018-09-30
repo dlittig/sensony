@@ -1,14 +1,17 @@
 {% extends 'AppBundle::base.html.twig' %}
 
 {% block body %}
-    {% if error %}
-        <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
-
     <!--link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'-->
     <div class="logo">Sensony</div>
     <div class="login-block">
         <h1>Login</h1>
+        {% if error %}
+            {% if error['messageKey'] is defined %}
+                <div class="error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% else %}
+                <div class="error">{{ error }}</div>
+            {% endif %}
+        {% endif %}
         <form action="{{ path('login') }}" method="post">
             <input type="text" id="username" name="_username" value="{{ last_username }}" placeholder="Username" />
             <input type="password" id="password" name="_password" placeholder="Password" />

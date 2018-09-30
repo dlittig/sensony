@@ -93,3 +93,12 @@ body {
     background: #205081;
     /* background: #ff7b81; */
 }
+
+div.error {
+    margin-bottom: 15px;
+    text-align: center;
+    padding: 10px;
+    border-top: 1px solid salmon;
+    border-bottom: 1px solid salmon;
+    color: salmon;
+}

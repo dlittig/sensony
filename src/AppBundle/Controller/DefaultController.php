@@ -42,6 +42,7 @@ class DefaultController extends Controller {
         if (!$this->get('security.authorization_checker')->isGranted('ROLE_USER') || $expired === true) {
             // get the login error if there is one
             $error = $authUtils->getLastAuthenticationError();
+            //$error = var_dump($this->getDoctrine()->getManager()->getRepository('AppBundle:User')->findAll());
 
             // last username entered by the user
             $lastUsername = $authUtils->getLastUsername();
